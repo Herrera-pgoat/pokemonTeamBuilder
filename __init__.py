@@ -1,7 +1,7 @@
 #This is the init py file but I don't  konw what to put in here :(
 import os
 
-#importing flask 
+#importing flask
 from flask import Flask,render_template
 
 #Function Name :create_app
@@ -17,7 +17,7 @@ def create_app(test_config=None):
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-		#This is loading it from a python file how cool 
+		#This is loading it from a python file how cool
         app.config.from_pyfile('config.py', silent=True)
     else:
         # load the test config if passed in
@@ -30,9 +30,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return render_template('pokemonProjectPages/register.html')
+    # loads teh pages.py file with all of the routes and stuff 
+    from . import pages
+    app.register_blueprint(pages.bp)
+
 
     return app

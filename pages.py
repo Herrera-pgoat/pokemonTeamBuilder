@@ -14,6 +14,7 @@ def mainPage():
 #This is the register page
 @bp.route('/register',methods=['GET','POST'])
 def register():
+    #I should check whether the thing is get or post because now no matter what I am going here 
     return render_template('/pokemonProjectPages/register.html')
     #we are right now not doing anything I just want to get the views in a Function
 

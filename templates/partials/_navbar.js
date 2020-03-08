@@ -7,7 +7,7 @@ function NavbarPoke(props) {
   //In here I will have a navbar one day
   React.createElement(
     "nav",
-    { "class": "navbar navbar-expand-lg navbar-light bg-light" },
+    { "class": "navbar navbar-expand-lg navbar-light" },
     React.createElement(
       "a",
       { "class": "navbar-brand", href: "{{url_for('.mainPage')}}" },
@@ -27,10 +27,10 @@ function NavbarPoke(props) {
       { "class": "collapse navbar-collapse", id: "navbarNavDropDown" },
       React.createElement(
         "ul",
-        { "class": "navbar-nav" },
+        { "class": "navbar-nav " },
         React.createElement(
           "li",
-          { "class": "nav-item" },
+          { "class": "nav-item " },
           React.createElement(
             "a",
             { "class": "nav-link", href: "{{ url_for('.aboutPage') }}" },

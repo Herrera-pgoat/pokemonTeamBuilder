@@ -4,10 +4,11 @@
 
 	<title> Pokemon teamBuilder </title>
   <div id="app">
-	<div id="navbarPoke"> </div> <!--This div tag with id navbarPoke will have the navbar in it -->
-	<h1> Work in progress still </h1>
-
-	<body>
+	<div id="navbarPoke" style="background-color:#ff5253"></div> <!--This div tag with id navbarPoke will have the navbar in it -->
+	<body >
+	<!--We are loading react in the top because we will need it in our other partials so we need it at the top -->
+  <script src={{url_for('static',filename='js/react.production.min.js')}} > </script>
+	<script src={{url_for('static',filename='js/react-dom.production.min.js')}} > </script>
 
 	{% block content%}
 
@@ -17,8 +18,7 @@
 
 </div> <!--this closing div tag is the end of app -->
 	<!--Right here is the react library for doing things the first two are  -->
-	<script src={{url_for('static',filename='js/react.production.min.js')}} > </script>
-	<script src={{url_for('static',filename='js/react-dom.production.min.js')}} > </script>
+
 	<script src={{url_for('static',filename='js/bootstrap.bundle.min.js')}} > </script>
 	<script src={{url_for('static',filename='js/jquery-3.4.1.js')}} > </script>
 <!--What this does is let the jinja2 template engine go through my react stuff before it is loaded that way I can use jinja2 in my react stuff -->

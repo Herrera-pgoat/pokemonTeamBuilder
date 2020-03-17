@@ -9,8 +9,9 @@
 			feoiaj
 		</div>
 		<!-- This is the column space that useres will be able to select pokemon to their team. This will be in React-->
-	  <div class="col-12 col-lg-5" style="background-color:blue">
+	  <div class="col-12 col-lg-5" style="">
 		  <p> This is going to be the main page  </p>
+			<div id="pokemons"> </div>
 		</div>
 		<!--This is where there will be a table that has the type stuff in it. The table will be in react  -->
 		<div class="col-12 col-lg-6" style="">
@@ -22,6 +23,7 @@
 
 	<script type="text/javascript">
 	  {% include "partials/_tableType.js" %}
+		{% include "partials/_selectPokemonCard.js" %}
 	</script>
 
 {% endblock %}

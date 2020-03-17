@@ -44,14 +44,16 @@ class TableRow extends React.Component{
     const type = this.props.type;
     let returnedRow;
     if ( type != "0") {
-      returnedRow = (<tr class="type" id={this.props.type} > {this.props.type}
-        <TableSquare word="Zero " />
-        <TableSquare word="Point 25" />
-        <TableSquare word="Point 5" />
-        <TableSquare word="Integer 1" />
-        <TableSquare word="Integer 2" />
-        <TableSquare word="Integer 4" />
-      </tr>);
+      returnedRow = (
+        <tr class="type" id={this.props.type} > {this.props.type}
+          <TableSquare word="Zero " />
+          <TableSquare word="Point 25" />
+          <TableSquare word="Point 5" />
+          <TableSquare word="Integer 1" />
+          <TableSquare word="Integer 2" />
+          <TableSquare word="Integer 4" />
+        </tr>
+      );
     }
     else{
       returnedRow = (

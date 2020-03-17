@@ -8,6 +8,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 //So first thought is to have the pokemonList contain a list of the pokemoncards and we will
 //increase or decrease the number of cards through the button in the pokemoncard ??
+/*
+<PokemonCard name="Tyranitar" type1="Dark" type2="Rock"/>
+<PokemonCard name="Garchomp" type1="Dragon" type2="Ground"/>
+<PokemonCard name="Greninja" type1="Water" type2="Dark"/>
+<PokemonCard name="Charizard" type1="Fire" type2="Flying"/>
+<PokemonCard name="Poplio" type1="Water" type2=""/>
+<PokemonCard name="Infernape" type1="Fire" type2="Fighting"/>
+*/
 var PokemonList = function (_React$Component) {
   _inherits(PokemonList, _React$Component);
 
@@ -20,15 +28,18 @@ var PokemonList = function (_React$Component) {
   _createClass(PokemonList, [{
     key: "render",
     value: function render() {
+      //List of all the pokemon we are going to have in the team
+      pokemonTeam = [['Tyranitar', "Dark", "Rock"], ["Garchomp", "Dragon", "Ground"], ["Greninja", "Water", "Dark"], ["Charizard", "Fire", "Flying"], ["Alakazam", "Psychic", ""], ["Infernape", "Fire", "Fighting"]];
+
+      //Here we are creating a pokemon tag for every pokemon in our pokemon team list
+      listItems = pokemonTeam.map(function (pokemon) {
+        return React.createElement(PokemonCard, { name: pokemon[0], type1: pokemon[1], type2: pokemon[2] });
+      });
+
       return React.createElement(
         "span",
         null,
-        React.createElement(PokemonCard, { name: "Tyranitar", type1: "Dark", type2: "Rock" }),
-        React.createElement(PokemonCard, { name: "Garchomp", type1: "Dragon", type2: "Ground" }),
-        React.createElement(PokemonCard, { name: "Greninja", type1: "Water", type2: "Dark" }),
-        React.createElement(PokemonCard, { name: "Charizard", type1: "Fire", type2: "Flying" }),
-        React.createElement(PokemonCard, { name: "Poplio", type1: "Water", type2: "" }),
-        React.createElement(PokemonCard, { name: "Infernape", type1: "Fire", type2: "Fighting" })
+        listItems
       );
     }
   }]);
@@ -73,7 +84,7 @@ var PokemonCard = function (_React$Component2) {
           " "
         );
       }
-      //Returing the general outline of the card we will have 
+      //Returing the general outline of the card we will have
       return React.createElement(
         "div",
         { "class": "card border-info" },

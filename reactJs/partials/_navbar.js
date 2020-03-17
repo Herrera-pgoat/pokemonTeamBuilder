@@ -5,7 +5,7 @@ function NavbarPoke(props) {
   //this variable has the whole navbar !
   const navbar = (
     //In here I will have a navbar one day
-    <nav class="navbar navbar-expand-lg navbar-light"  >
+    <nav class="navbar navbar-expand-lg navbar-light"  style={{marginBottom:10}}>
       <a class="navbar-brand" href="{{url_for('.mainPage')}}"> Pokemon Team Builder</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropDown" aria-controls="navbarNavDropDown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"> </span>

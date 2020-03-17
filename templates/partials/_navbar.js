@@ -7,7 +7,7 @@ function NavbarPoke(props) {
   //In here I will have a navbar one day
   React.createElement(
     "nav",
-    { "class": "navbar navbar-expand-lg navbar-light" },
+    { "class": "navbar navbar-expand-lg navbar-light", style: { marginBottom: 10 } },
     React.createElement(
       "a",
       { "class": "navbar-brand", href: "{{url_for('.mainPage')}}" },

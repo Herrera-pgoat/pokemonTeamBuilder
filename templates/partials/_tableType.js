@@ -20,7 +20,6 @@ var TableType = function (_React$Component) {
   _createClass(TableType, [{
     key: "render",
     value: function render() {
-      /* Making a table elem thing righ here*/
       table = React.createElement(
         "div",
         null,

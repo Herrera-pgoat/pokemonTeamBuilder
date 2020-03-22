@@ -6,7 +6,6 @@ class TableType extends React.Component{
   }
 
   render(){
-    /* Making a table elem thing righ here*/
     table = (
       <div   >
         <TableRow type="0" />

@@ -8,14 +8,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 //So first thought is to have the pokemonList contain a list of the pokemoncards and we will
 //increase or decrease the number of cards through the button in the pokemoncard ??
-/*
-<PokemonCard name="Tyranitar" type1="Dark" type2="Rock"/>
-<PokemonCard name="Garchomp" type1="Dragon" type2="Ground"/>
-<PokemonCard name="Greninja" type1="Water" type2="Dark"/>
-<PokemonCard name="Charizard" type1="Fire" type2="Flying"/>
-<PokemonCard name="Poplio" type1="Water" type2=""/>
-<PokemonCard name="Infernape" type1="Fire" type2="Fighting"/>
-*/
 var PokemonList = function (_React$Component) {
   _inherits(PokemonList, _React$Component);
 
@@ -53,73 +45,128 @@ var PokemonCard = function (_React$Component2) {
   function PokemonCard(props) {
     _classCallCheck(this, PokemonCard);
 
-    return _possibleConstructorReturn(this, (PokemonCard.__proto__ || Object.getPrototypeOf(PokemonCard)).call(this, props));
+    var _this2 = _possibleConstructorReturn(this, (PokemonCard.__proto__ || Object.getPrototypeOf(PokemonCard)).call(this, props));
+
+    _this2.state = { isActive: true };
+    //binding the function to this place
+    _this2.addPokemonFunc = _this2.addPokemonFunc.bind(_this2);
+    _this2.removePokemonFunc = _this2.removePokemonFunc.bind(_this2);
+
+    return _this2;
   }
 
+  //creating a function to change the state of a pokemon  to true when we have added a pokemon
+
+
   _createClass(PokemonCard, [{
+    key: "addPokemonFunc",
+    value: function addPokemonFunc() {
+      this.setState({ isActive: true });
+    }
+
+    //creating a function to change the state of a pokemon to false when we choose to remove a pokemon. I typed out this whole comment again even though it is almost identical to the other one.
+
+  }, {
+    key: "removePokemonFunc",
+    value: function removePokemonFunc() {
+      this.setState({ isActive: false });
+    }
+  }, {
     key: "render",
     value: function render() {
       /* Hither is where I will make the card look nice for the pokemons
       card
       has name , types, button to remove itself*/
-      var type2 = this.props.type2;
-      //Just putting nothing important in here but i have ot initialize it somehow you know what I am saying !?!
-      secondTypeIcon = React.createElement(
-        "p",
-        null,
-        " hi"
-      );
-      //If there is a type for the second type then we should make an icon that displays that .
-      if (type2 != "") {
+      //Here we should check if this card is active. WHen the card is active we show the pokemon and when it is not we show just add pokemon button
+      active = this.state.isActive;
+      if (active) {
+        var type2 = this.props.type2;
+        //Just putting nothing important in here but i have ot initialize it somehow you know what I am saying !?!
         secondTypeIcon = React.createElement(
-          "span",
-          { id: this.props.type2, "class": " border rounded border-dark typeCard" },
-          this.props.type2
-        );
-      } else {
-        //basically it is nothing
-        secondTypeIcon = React.createElement(
-          "span",
+          "p",
           null,
-          " "
+          " hi"
         );
-      }
-      //Returing the general outline of the card we will have
-      return React.createElement(
-        "div",
-        { "class": "card border-info" },
-        React.createElement(
-          "div",
-          { "class": "card-header" },
-          " ",
-          this.props.name,
-          React.createElement(
+        //If there is a type for the second type then we should make an icon that displays that .
+        if (type2 != "") {
+          secondTypeIcon = React.createElement(
             "span",
-            { "class": "ml-auto" },
+            { id: this.props.type2, "class": " border rounded border-dark typeCard" },
+            this.props.type2
+          );
+        } else {
+          //basically it is nothing
+          secondTypeIcon = React.createElement(
+            "span",
+            null,
+            " "
+          );
+        }
+        //Returing the general outline of the card we will have
+        return React.createElement(
+          "div",
+          { "class": "pokeCard card border-info" },
+          React.createElement(
+            "div",
+            { "class": "card-header" },
+            " ",
+            this.props.name,
             React.createElement(
               "span",
-              { id: this.props.type1, "class": " border rounded border-dark typeCard" },
-              this.props.type1
-            ),
-            secondTypeIcon
-          )
-        ),
-        React.createElement(
-          "div",
-          { "class": "card-body" },
-          React.createElement(
-            "button",
-            { type: "button", "class": "btn btn-danger btn-sm " },
-            " Remove Pokemon "
+              { "class": "ml-auto" },
+              React.createElement(
+                "span",
+                { id: this.props.type1, "class": " border rounded border-dark typeCard" },
+                this.props.type1
+              ),
+              secondTypeIcon
+            )
           ),
           React.createElement(
-            "button",
-            { type: "button", "class": "btn btn-primary btn-sm" },
-            " Replace Pokemon "
+            "div",
+            { "class": "card-body" },
+            React.createElement(
+              "button",
+              { type: "button", "class": "btn btn-danger btn-sm ", onClick: this.removePokemonFunc },
+              " Remove Pokemon "
+            ),
+            React.createElement(
+              "button",
+              { type: "button", "class": "btn btn-primary btn-sm" },
+              " Replace Pokemon "
+            )
           )
-        )
-      );
-    }
+        );
+      } //end of the case where it is active
+      //what we should do if the card is not active. AKA there is no pokemon showing
+      else {
+          //Returing the general outline of the card we will have
+          return React.createElement(
+            "div",
+            { "class": "pokeCard card border-info" },
+            React.createElement(
+              "div",
+              { "class": "card-body" },
+              React.createElement(
+                "div",
+                null,
+                React.createElement(
+                  "label",
+                  { "for": "addPokemon" },
+                  " Add Pokemon "
+                ),
+                React.createElement("input", { id: "addPokemon", type: "text", "class": "", placeholder: "Type Pokemon Name!" })
+              ),
+              React.createElement(
+                "button",
+                { type: "button", "class": "btn btn-danger btn-sm", onClick: this.addPokemonFunc },
+                " Add Pokemon "
+              )
+            )
+          ); //end of the return
+        } //end of the else statement
+    } //end of render function
+
   }]);
 
   return PokemonCard;

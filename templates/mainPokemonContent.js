@@ -1,5 +1,7 @@
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -16,17 +18,47 @@ var PokemonMainContent = function (_React$Component) {
   function PokemonMainContent(props) {
     _classCallCheck(this, PokemonMainContent);
 
-    return _possibleConstructorReturn(this, (PokemonMainContent.__proto__ || Object.getPrototypeOf(PokemonMainContent)).call(this, props));
+    //the pokemonMainContent has 6 pokemon with a list of two elements
+    //the elements in each poke list are the types of the pokemon
+    var _this = _possibleConstructorReturn(this, (PokemonMainContent.__proto__ || Object.getPrototypeOf(PokemonMainContent)).call(this, props));
+
+    _this.state = {
+      poke1: ['', ''],
+      poke2: ['', ''],
+      poke3: ['', ''],
+      poke4: ['', ''],
+      poke5: ['', ''],
+      poke6: ['', '']
+    };
+
+    //binding the function to here this pokemonMainContent class
+    _this.updatePoke = _this.updatePoke.bind(_this);
+    //then I need to tie each one to one of the functions to a card in the pokemon list
+
+    //Finally I need to tie the tableStuff to the state of each of these pokemons
+    //it will read the type then basd on the type it will whether it is weak to that pokemon type or not
+    //at long last it will update the table based on the info it gets from the type stuff
+    return _this;
   }
 
+  //the function takes in both types of the pokemon and updates the state here that the pokemon type has changed
+  //it also takes in the pokenumber (where it is on the list) so that I only use one function to update any of the values
+  //[pokeNum] means we put the value of pokeNum as the key for the state
+
+
   _createClass(PokemonMainContent, [{
-    key: "render",
+    key: 'updatePoke',
+    value: function updatePoke(pokeNum, type1, type2) {
+      this.setState(_defineProperty({}, pokeNum, [type1, type2]));
+    }
+  }, {
+    key: 'render',
     value: function render() {
       //the div is a row that way neither pokemonList or TableType tries to go to the other row. THe row class confines it to current row unless I say otherwise
       return React.createElement(
-        "div",
-        { "class": " row" },
-        React.createElement(PokemonList, null),
+        'div',
+        { 'class': ' row' },
+        React.createElement(PokemonList, { onPokemonUpdate: this.updatePoke }),
         React.createElement(TableType, null)
       );
     } //end of render
@@ -56,7 +88,7 @@ var TableType = function (_React$Component2) {
 
 
   _createClass(TableType, [{
-    key: "pokemonTypeWeakness",
+    key: 'pokemonTypeWeakness',
     value: function pokemonTypeWeakness(type) {
       switch (type) {
         case "Bug":
@@ -141,7 +173,7 @@ var TableType = function (_React$Component2) {
       }
     }
   }, {
-    key: "pokemonWeakness",
+    key: 'pokemonWeakness',
     value: function pokemonWeakness(type1, type2) {
       returnList = [];
       list1 = pokemonTypeWeakness(type1);
@@ -160,30 +192,30 @@ var TableType = function (_React$Component2) {
       return returnList;
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       table = React.createElement(
-        "div",
-        { "class": "col-sm-12 col-lg-6" },
-        React.createElement(TableRow, { type: "0" }),
-        React.createElement(TableRow, { type: "Bug" }),
-        React.createElement(TableRow, { type: "Dark" }),
-        React.createElement(TableRow, { type: "Dragon" }),
-        React.createElement(TableRow, { type: "Electric" }),
-        React.createElement(TableRow, { type: "Fairy" }),
-        React.createElement(TableRow, { type: "Fighting" }),
-        React.createElement(TableRow, { type: "Fire" }),
-        React.createElement(TableRow, { type: "Flying" }),
-        React.createElement(TableRow, { type: "Ghost" }),
-        React.createElement(TableRow, { type: "Grass" }),
-        React.createElement(TableRow, { type: "Ground" }),
-        React.createElement(TableRow, { type: "Ice" }),
-        React.createElement(TableRow, { type: "Normal" }),
-        React.createElement(TableRow, { type: "Poison" }),
-        React.createElement(TableRow, { type: "Psychic" }),
-        React.createElement(TableRow, { type: "Rock" }),
-        React.createElement(TableRow, { type: "Steel" }),
-        React.createElement(TableRow, { type: "Water" })
+        'div',
+        { 'class': 'col-sm-12 col-lg-6' },
+        React.createElement(TableRow, { type: '0' }),
+        React.createElement(TableRow, { type: 'Bug' }),
+        React.createElement(TableRow, { type: 'Dark' }),
+        React.createElement(TableRow, { type: 'Dragon' }),
+        React.createElement(TableRow, { type: 'Electric' }),
+        React.createElement(TableRow, { type: 'Fairy' }),
+        React.createElement(TableRow, { type: 'Fighting' }),
+        React.createElement(TableRow, { type: 'Fire' }),
+        React.createElement(TableRow, { type: 'Flying' }),
+        React.createElement(TableRow, { type: 'Ghost' }),
+        React.createElement(TableRow, { type: 'Grass' }),
+        React.createElement(TableRow, { type: 'Ground' }),
+        React.createElement(TableRow, { type: 'Ice' }),
+        React.createElement(TableRow, { type: 'Normal' }),
+        React.createElement(TableRow, { type: 'Poison' }),
+        React.createElement(TableRow, { type: 'Psychic' }),
+        React.createElement(TableRow, { type: 'Rock' }),
+        React.createElement(TableRow, { type: 'Steel' }),
+        React.createElement(TableRow, { type: 'Water' })
       );
       return table; /*This is the end of return */
     }
@@ -202,57 +234,57 @@ var TableRow = function (_React$Component3) {
   }
 
   _createClass(TableRow, [{
-    key: "render",
+    key: 'render',
     value: function render() {
       var type = this.props.type;
       var returnedRow = void 0;
       if (type != "0") {
         returnedRow = React.createElement(
-          "tr",
-          { "class": "type", id: this.props.type },
-          " ",
+          'tr',
+          { 'class': 'type', id: this.props.type },
+          ' ',
           this.props.type,
-          React.createElement(TableSquare, { word: "Zero " }),
-          React.createElement(TableSquare, { word: "Point 25" }),
-          React.createElement(TableSquare, { word: "Point 5" }),
-          React.createElement(TableSquare, { word: "Integer 1" }),
-          React.createElement(TableSquare, { word: "Integer 2" }),
-          React.createElement(TableSquare, { word: "Integer 4" })
+          React.createElement(TableSquare, { word: 'Zero ' }),
+          React.createElement(TableSquare, { word: 'Point 25' }),
+          React.createElement(TableSquare, { word: 'Point 5' }),
+          React.createElement(TableSquare, { word: 'Integer 1' }),
+          React.createElement(TableSquare, { word: 'Integer 2' }),
+          React.createElement(TableSquare, { word: 'Integer 4' })
         );
       } else {
         returnedRow = React.createElement(
-          "tr",
-          { id: "RowWeakness" },
-          " Strength of Hit",
+          'tr',
+          { id: 'RowWeakness' },
+          ' Strength of Hit',
           React.createElement(
-            "td",
+            'td',
             null,
-            " 0x "
+            ' 0x '
           ),
           React.createElement(
-            "td",
+            'td',
             null,
-            " 0.25x "
+            ' 0.25x '
           ),
           React.createElement(
-            "td",
+            'td',
             null,
-            " 0.5x "
+            ' 0.5x '
           ),
           React.createElement(
-            "td",
+            'td',
             null,
-            " 1x "
+            ' 1x '
           ),
           React.createElement(
-            "td",
+            'td',
             null,
-            " 2x "
+            ' 2x '
           ),
           React.createElement(
-            "td",
+            'td',
             null,
-            " 4x "
+            ' 4x '
           )
         );
       }
@@ -276,16 +308,16 @@ var TableSquare = function (_React$Component4) {
   }
 
   _createClass(TableSquare, [{
-    key: "render",
+    key: 'render',
     value: function render() {
       return React.createElement(
-        "td",
-        { "class": "square" },
-        " ",
+        'td',
+        { 'class': 'square' },
+        ' ',
         this.state.num,
-        " ",
+        ' ',
         this.props.word,
-        " "
+        ' '
       );
     }
   }]);
@@ -303,19 +335,27 @@ var PokemonList = function (_React$Component5) {
   }
 
   _createClass(PokemonList, [{
-    key: "render",
+    key: 'render',
     value: function render() {
+      var _this6 = this;
+
       //List of all the pokemon we are going to have in the team
       pokemonTeam = [['Tyranitar', "Dark", "Rock"], ["Garchomp", "Dragon", "Ground"], ["Greninja", "Water", "Dark"], ["Charizard", "Fire", "Flying"], ["Alakazam", "Psychic", ""], ["Infernape", "Fire", "Fighting"]];
 
+      /*
+      rn I have
+      this.props.onPokemonUpdate  <--- this has the function that updates the state of the papa depending on the poke number we are
+      */
       //Here we are creating a pokemon tag for every pokemon in our pokemon team list
-      listItems = pokemonTeam.map(function (pokemon) {
-        return React.createElement(PokemonCard, { name: pokemon[0], type1: pokemon[1], type2: pokemon[2] });
+      //every pokemon is getting a function that changes this parents (their grandparents) state
+      listItems = pokemonTeam.map(function (pokemon, index) {
+        increasedIndex = index + 1;
+        return React.createElement(PokemonCard, { name: pokemon[0], type1: pokemon[1], type2: pokemon[2], stateNum: "poke" + increasedIndex, singlePokeUpdate: _this6.props.onPokemonUpdate });
       });
 
       return React.createElement(
-        "div",
-        { "class": "col-sm-12 col-lg-6" },
+        'div',
+        { 'class': 'col-sm-12 col-lg-6' },
         listItems
       );
     }
@@ -330,33 +370,38 @@ var PokemonCard = function (_React$Component6) {
   function PokemonCard(props) {
     _classCallCheck(this, PokemonCard);
 
-    var _this6 = _possibleConstructorReturn(this, (PokemonCard.__proto__ || Object.getPrototypeOf(PokemonCard)).call(this, props));
+    var _this7 = _possibleConstructorReturn(this, (PokemonCard.__proto__ || Object.getPrototypeOf(PokemonCard)).call(this, props));
 
-    _this6.state = { isActive: true };
+    _this7.state = { isActive: false };
     //binding the function to this place
-    _this6.addPokemonFunc = _this6.addPokemonFunc.bind(_this6);
-    _this6.removePokemonFunc = _this6.removePokemonFunc.bind(_this6);
-    return _this6;
+    _this7.addPokemonFunc = _this7.addPokemonFunc.bind(_this7);
+    _this7.removePokemonFunc = _this7.removePokemonFunc.bind(_this7);
+    return _this7;
   }
 
   //creating a function to change the state of a pokemon  to true when we have added a pokemon
 
 
   _createClass(PokemonCard, [{
-    key: "addPokemonFunc",
+    key: 'addPokemonFunc',
     value: function addPokemonFunc() {
       this.setState({ isActive: true });
+      //not just that but I need to update the grandparents state to tell them that I must do this
+      //updateing the grandparents state with the new pokemon type we have every time we add a pokemon
+      this.props.singlePokeUpdate(this.props.stateNum, this.props.type1, this.props.type2);
     }
 
     //creating a function to change the state of a pokemon to false when we choose to remove a pokemon. I typed out this whole comment again even though it is almost identical to the other one.
 
   }, {
-    key: "removePokemonFunc",
+    key: 'removePokemonFunc',
     value: function removePokemonFunc() {
       this.setState({ isActive: false });
+      //every time we remove a pokemon we basically remove it by not giving it a type 
+      this.props.singlePokeUpdate(this.props.stateNum, '', '');
     }
   }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       /* Hither is where I will make the card look nice for the pokemons
       card
@@ -367,57 +412,57 @@ var PokemonCard = function (_React$Component6) {
         var type2 = this.props.type2;
         //Just putting nothing important in here but i have ot initialize it somehow you know what I am saying !?!
         secondTypeIcon = React.createElement(
-          "p",
+          'p',
           null,
-          " hi"
+          ' hi'
         );
         //If there is a type for the second type then we should make an icon that displays that .
         if (type2 != "") {
           secondTypeIcon = React.createElement(
-            "span",
-            { id: this.props.type2, "class": " border rounded border-dark typeCard" },
+            'span',
+            { id: this.props.type2, 'class': ' border rounded border-dark typeCard' },
             this.props.type2
           );
         } else {
           //basically it is nothing
           secondTypeIcon = React.createElement(
-            "span",
+            'span',
             null,
-            " "
+            ' '
           );
         }
         //Returing the general outline of the card we will have
         return React.createElement(
-          "div",
-          { "class": "pokeCard card border-info" },
+          'div',
+          { 'class': 'pokeCard card border-info' },
           React.createElement(
-            "div",
-            { "class": "card-header" },
-            " ",
+            'div',
+            { 'class': 'card-header' },
+            ' ',
             this.props.name,
             React.createElement(
-              "span",
-              { "class": "ml-auto" },
+              'span',
+              { 'class': 'ml-auto' },
               React.createElement(
-                "span",
-                { id: this.props.type1, "class": " border rounded border-dark typeCard" },
+                'span',
+                { id: this.props.type1, 'class': ' border rounded border-dark typeCard' },
                 this.props.type1
               ),
               secondTypeIcon
             )
           ),
           React.createElement(
-            "div",
-            { "class": "card-body" },
+            'div',
+            { 'class': 'card-body' },
             React.createElement(
-              "button",
-              { type: "button", "class": "btn btn-danger btn-sm ", onClick: this.removePokemonFunc },
-              " Remove Pokemon "
+              'button',
+              { type: 'button', 'class': 'btn btn-danger btn-sm ', onClick: this.removePokemonFunc },
+              ' Remove Pokemon '
             ),
             React.createElement(
-              "button",
-              { type: "button", "class": "btn btn-primary btn-sm" },
-              " Replace Pokemon "
+              'button',
+              { type: 'button', 'class': 'btn btn-primary btn-sm' },
+              ' Replace Pokemon '
             )
           )
         );
@@ -426,25 +471,25 @@ var PokemonCard = function (_React$Component6) {
       else {
           //Returing the general outline of the card we will have
           return React.createElement(
-            "div",
-            { "class": "pokeCard card border-info" },
+            'div',
+            { 'class': 'pokeCard card border-info' },
             React.createElement(
-              "div",
-              { "class": "card-body" },
+              'div',
+              { 'class': 'card-body' },
               React.createElement(
-                "div",
+                'div',
                 null,
                 React.createElement(
-                  "label",
-                  { "for": "addPokemon" },
-                  " Add Pokemon "
+                  'label',
+                  { 'for': 'addPokemon' },
+                  ' Add Pokemon '
                 ),
-                React.createElement("input", { id: "addPokemon", type: "text", "class": "", placeholder: "Type Pokemon Name!" })
+                React.createElement('input', { id: 'addPokemon', type: 'text', 'class': '', placeholder: 'Type Pokemon Name!' })
               ),
               React.createElement(
-                "button",
-                { type: "button", "class": "btn btn-danger btn-sm", onClick: this.addPokemonFunc },
-                " Add Pokemon "
+                'button',
+                { type: 'button', 'class': 'btn btn-danger btn-sm', onClick: this.addPokemonFunc },
+                ' Add Pokemon '
               )
             )
           ); //end of the return

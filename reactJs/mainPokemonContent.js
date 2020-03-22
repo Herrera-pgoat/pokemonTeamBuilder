@@ -5,13 +5,38 @@
 class PokemonMainContent extends React.Component{
   constructor(props){
     super(props);
+    //the pokemonMainContent has 6 pokemon with a list of two elements
+    //the elements in each poke list are the types of the pokemon
+    this.state = {
+      poke1 : ['',''],
+      poke2 : ['',''],
+      poke3 : ['',''],
+      poke4 : ['',''],
+      poke5 : ['',''],
+      poke6 : ['','']
+    };
+
+    //binding the function to here this pokemonMainContent class
+    this.updatePoke = this.updatePoke.bind(this);
+    //then I need to tie each one to one of the functions to a card in the pokemon list
+
+    //Finally I need to tie the tableStuff to the state of each of these pokemons
+    //it will read the type then basd on the type it will whether it is weak to that pokemon type or not
+    //at long last it will update the table based on the info it gets from the type stuff
+  }
+
+//the function takes in both types of the pokemon and updates the state here that the pokemon type has changed
+//it also takes in the pokenumber (where it is on the list) so that I only use one function to update any of the values
+//[pokeNum] means we put the value of pokeNum as the key for the state
+  updatePoke(pokeNum, type1,type2){
+    this.setState({ [pokeNum]: [type1,type2]});
   }
 
   render(){
     //the div is a row that way neither pokemonList or TableType tries to go to the other row. THe row class confines it to current row unless I say otherwise
     return(
       <div class=" row">
-          <PokemonList />
+          <PokemonList onPokemonUpdate={this.updatePoke} />
           <TableType />
       </div>
     );
@@ -221,9 +246,16 @@ class PokemonList extends React.Component{
     //List of all the pokemon we are going to have in the team
     pokemonTeam= [['Tyranitar',"Dark","Rock"],["Garchomp","Dragon","Ground"],["Greninja","Water","Dark"],["Charizard","Fire","Flying"],["Alakazam","Psychic",""],["Infernape","Fire","Fighting"]];
 
+/*
+rn I have
+this.props.onPokemonUpdate  <--- this has the function that updates the state of the papa depending on the poke number we are
+*/
     //Here we are creating a pokemon tag for every pokemon in our pokemon team list
-    listItems = pokemonTeam.map((pokemon) =>
-      <PokemonCard name={pokemon[0]} type1={pokemon[1]} type2={pokemon[2]}/>
+    //every pokemon is getting a function that changes this parents (their grandparents) state
+    listItems = pokemonTeam.map((pokemon,index) =>{
+      increasedIndex = (index+1);
+      return (<PokemonCard name={pokemon[0]} type1={pokemon[1]} type2={pokemon[2]} stateNum={"poke"+increasedIndex} singlePokeUpdate={this.props.onPokemonUpdate}/>);
+    }
     );
 
     return (
@@ -237,7 +269,7 @@ class PokemonList extends React.Component{
 class PokemonCard extends React.Component{
   constructor(props){
     super(props);
-    this.state = {isActive:true};
+    this.state = {isActive:false};
     //binding the function to this place
     this.addPokemonFunc = this.addPokemonFunc.bind(this);
     this.removePokemonFunc = this.removePokemonFunc.bind(this);
@@ -246,11 +278,17 @@ class PokemonCard extends React.Component{
 //creating a function to change the state of a pokemon  to true when we have added a pokemon
   addPokemonFunc(){
     this.setState({isActive: true});
+    //not just that but I need to update the grandparents state to tell them that I must do this
+    //updateing the grandparents state with the new pokemon type we have every time we add a pokemon
+    this.props.singlePokeUpdate(this.props.stateNum,this.props.type1,this.props.type2);
   }
 
 //creating a function to change the state of a pokemon to false when we choose to remove a pokemon. I typed out this whole comment again even though it is almost identical to the other one.
   removePokemonFunc(){
     this.setState({isActive:false});
+    //every time we remove a pokemon we basically remove it by not giving it a type 
+    this.props.singlePokeUpdate(this.props.stateNum,'','');
+
   }
 
   render(){

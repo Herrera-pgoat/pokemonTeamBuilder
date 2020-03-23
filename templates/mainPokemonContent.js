@@ -59,7 +59,7 @@ var PokemonMainContent = function (_React$Component) {
         'div',
         { 'class': ' row' },
         React.createElement(PokemonList, { onPokemonUpdate: this.updatePoke }),
-        React.createElement(TableType, null)
+        React.createElement(TableType, { pokeTypeInfo: [this.state.poke1, this.state.poke2, this.state.poke3, this.state.poke4, this.state.poke5, this.state.poke6] })
       );
     } //end of render
 
@@ -95,127 +95,199 @@ var TableType = function (_React$Component2) {
           //remember this lilst is the effectiveness of types AGAINST bug type pokemon
           //x2 effective are fire flying and rock
           //.5 effective is fighting grass, ground
-          bugList = [1, 1, 1, 1, 1, .5, 2, 2, 1, .5, .5, 1, 1, 1, 1, 2, 1, 1];
-          return bugList;
+          bugList1 = [1, 1, 1, 1, 1, .5, 2, 2, 1, .5, .5, 1, 1, 1, 1, 2, 1, 1];
+          return bugList1;
           break; //pretty sure this is never triggered but better to be safe than sorry
         case "Dark":
-          darkList = [2, .5, 1, 1, 2, 2, 1, 1, .5, 1, 1, 1, 1, 1, 0, 1, 1, 1];
-          return darkList;
+          darkList1 = [2, .5, 1, 1, 2, 2, 1, 1, .5, 1, 1, 1, 1, 1, 0, 1, 1, 1];
+          return darkList1;
           break;
         case "Dragon":
-          dragonList = [1, 1, 2, .5, 2, 1, .5, 1, 1, .5, 1, 2, 1, 1, 1, 1, 1, .5];
-          return dragonList;
+          dragonList1 = [1, 1, 2, .5, 2, 1, .5, 1, 1, .5, 1, 2, 1, 1, 1, 1, 1, .5];
+          return dragonList1;
           break;
         case "Electric":
-          electricList = [1, 1, 1, .5, 1, 1, 1, .5, 1, 1, 2, 1, 1, 1, 1, 1, .5, 1];
-          return electricList;
+          electricList1 = [1, 1, 1, .5, 1, 1, 1, .5, 1, 1, 2, 1, 1, 1, 1, 1, .5, 1];
+          return electricList1;
           break;
         case "Fairy":
-          fairyList = [.5, .5, 0, 1, 1, .5, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1];
-          return fairyList;
+          fairyList1 = [.5, .5, 0, 1, 1, .5, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1];
+          return fairyList1;
           break;
         case "Fighting":
-          fightingList = [.5, .5, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, .5, 1, 1];
-          return fightingList;
+          fightingList1 = [.5, .5, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, .5, 1, 1];
+          return fightingList1;
           break;
         case "Fire":
-          fireList = [.5, 1, 1, 1, .5, 1, .5, 1, 1, .5, 2, .5, 1, 1, 1, 2, .5, 2];
-          return fireList;
+          fireList1 = [.5, 1, 1, 1, .5, 1, .5, 1, 1, .5, 2, .5, 1, 1, 1, 2, .5, 2];
+          return fireList1;
           break;
         case "Flying":
-          flyingList = [.5, 1, 1, 2, 1, .5, 1, 1, 1, .5, 0, 2, 1, 1, 1, 2, 1, 1];
-          return flyingList;
+          flyingList1 = [.5, 1, 1, 2, 1, .5, 1, 1, 1, .5, 0, 2, 1, 1, 1, 2, 1, 1];
+          return flyingList1;
           break;
         case "Ghost":
-          ghostList = [.5, 2, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 0, .5, 1, 1, 1, 1];
-          return ghostList;
+          ghostList1 = [.5, 2, 1, 1, 1, 0, 1, 1, 2, 1, 1, 1, 0, .5, 1, 1, 1, 1];
+          return ghostList1;
           break;
         case "Grass":
-          grassList = [2, 1, 1, .5, 1, 1, 2, 2, 1, .5, .5, 2, 1, 2, 1, 1, 1, .5];
-          return grassList;
+          grassList1 = [2, 1, 1, .5, 1, 1, 2, 2, 1, .5, .5, 2, 1, 2, 1, 1, 1, .5];
+          return grassList1;
           break;
         case "Ground":
-          groundList = [1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 2, 1, .5, 1, .5, 1, 2];
-          return groundList;
+          groundList1 = [1, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 2, 1, .5, 1, .5, 1, 2];
+          return groundList1;
           break;
         case "Ice":
-          iceList = [1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, .5, 1, 1, 1, 2, 2, 1];
-          return iceList;
+          iceList1 = [1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, .5, 1, 1, 1, 2, 2, 1];
+          return iceList1;
           break;
         case "Normal":
-          normalList = [1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-          return normalList;
+          normalList1 = [1, 1, 1, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+          return normalList1;
           break;
         case "Poison":
-          poisonList = [.5, 1, 1, 1, .5, .5, 1, 1, 1, .5, 2, 1, 1, .5, 2, 1, 1, 1];
-          return poisonList;
+          poisonList1 = [.5, 1, 1, 1, .5, .5, 1, 1, 1, .5, 2, 1, 1, .5, 2, 1, 1, 1];
+          return poisonList1;
           break;
         case "Psychic":
-          psychicList = [2, 2, 1, 1, 1, .5, 1, 1, 2, 1, 1, 1, 1, 1, .5, 1, 1, 1];
-          return psychicList;
+          psychicList1 = [2, 2, 1, 1, 1, .5, 1, 1, 2, 1, 1, 1, 1, 1, .5, 1, 1, 1];
+          return psychicList1;
           break;
         case "Rock":
-          rockList = [1, 1, 1, 1, 1, 2, .5, .5, 1, 2, 2, 1, .5, .5, 1, 1, 2, 2];
-          return rockList;
+          rockList1 = [1, 1, 1, 1, 1, 2, .5, .5, 1, 2, 2, 1, .5, .5, 1, 1, 2, 2];
+          return rockList1;
           break;
         case "Steel":
-          steelList = [.5, 1, .5, 1, .5, 2, 2, .5, 1, .5, 2, .5, .5, 0, .5, .5, .5, 1];
-          return steelList;
+          steelList1 = [.5, 1, .5, 1, .5, 2, 2, .5, 1, .5, 2, .5, .5, 0, .5, .5, .5, 1];
+          return steelList1;
           break;
         case "Water":
-          waterList = [1, 1, 1, 2, 1, 1, .5, 1, 1, 2, 1, .5, 1, 1, 1, 1, .5, .5];
-          return waterList;
+          waterList1 = [1, 1, 1, 2, 1, 1, .5, 1, 1, 2, 1, .5, 1, 1, 1, 1, .5, .5];
+          return waterList1;
           break;
         //if we do not get a type then we go here which should not impact the other type of the pokemon because the list is 1's
         default:
           //if we are not given a real type we return 1 for all
-          return [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+          return [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
       }
     }
+
+    //Function to determine what are the type things when we pass in the two types of the pokemon
+
   }, {
     key: 'pokemonWeakness',
     value: function pokemonWeakness(type1, type2) {
-      returnList = [];
-      list1 = pokemonTypeWeakness(type1);
-      list2 = pokemonTypeWeakness(type2);
-      //Getting the  length of list 2 in all honesty I know the size maybe putting in a hard value is better than getting it every time...
-      length = list2.length;
-      //assigning the length of returnList to be the same as the other lists
-      returnList.length = length;
+      list1 = this.pokemonTypeWeakness(type1);
+      list2 = this.pokemonTypeWeakness(type2);
 
-      //for loop that iterates for the size of the list and will fill returnList with proper values
-      for (i = 0; i < length; ++i) {
-        //the value of returnList is list1 * list2 because that is how types work in pokemon
-        returnList[i] = list1[i] * list2[i];
+      //if there is no second type then we return list1
+      if (list2[0] == -1) {
+        return list1;
       }
-      //returning returnList
-      return returnList;
-    }
+      //if there is a second type we go through the works and combine the lists
+      else {
+          //creating the list that will store the combination of lsit1&llist2
+          returnList = [];
+
+          //Getting the  length of list 2 in all honesty I know the size maybe putting in a hard value is better than getting it every time...
+          length = list2.length;
+
+          //assigning the length of returnList to be the same as the other lists
+          returnList.length = length;
+
+          //for loop that iterates for the size of the list and will fill returnList with proper values
+          for (i = 0; i < length; ++i) {
+            //the value of returnList is list1 * list2 because that is how types work in pokemon
+            returnList[i] = list1[i] * list2[i];
+          }
+          //returning returnList
+          return returnList;
+        }
+    } //end of pokemonWeakness
+
   }, {
     key: 'render',
     value: function render() {
+      //lists of how each pokemon reacts to each different types
+      bugList = [];
+      darkList = [];
+      dragonList = [];
+      electricList = [];
+      fairyList = [];
+      fightingList = [];
+      fireList = [];
+      flyingList = [];
+      ghostList = [];
+      grassList = [];
+      groundList = [];
+      iceList = [];
+      normalList = [];
+      poisonList = [];
+      psychicList = [];
+      rockList = [];
+      steelList = [];
+      waterList = [];
+
+      //getting all the pokemontypes and putting it in a variable that way I don't have to use this.props. ... 
+      var allPokemonTypes = this.props.pokeTypeInfo;
+
+      for (var _i = 0; _i < 6; _i++) {
+        //getting the type stuff of one pokemon ;)
+        type1 = allPokemonTypes[_i][0];
+        type2 = allPokemonTypes[_i][1];
+
+        //onePokemon has the type stuff of this singlePokemon
+        onePokemon = this.pokemonWeakness(type1, type2);
+
+        //basically if there is no type we don't even push anything to the lists
+        if (onePokemon[0] == -1) {
+          continue;
+        }
+        //adding the type to each list effectiveness
+        bugList.push(onePokemon[0]);
+        darkList.push(onePokemon[1]);
+        dragonList.push(onePokemon[2]);
+        electricList.push(onePokemon[3]);
+        fairyList.push(onePokemon[4]);
+        fightingList.push(onePokemon[5]);
+        fireList.push(onePokemon[6]);
+        flyingList.push(onePokemon[7]);
+        ghostList.push(onePokemon[8]);
+        grassList.push(onePokemon[9]);
+        groundList.push(onePokemon[10]);
+        iceList.push(onePokemon[11]);
+        normalList.push(onePokemon[12]);
+        poisonList.push(onePokemon[13]);
+        psychicList.push(onePokemon[14]);
+        rockList.push(onePokemon[15]);
+        steelList.push(onePokemon[16]);
+        waterList.push(onePokemon[17]);
+      } //end of the for loop
+
       table = React.createElement(
         'div',
         { 'class': 'col-sm-12 col-lg-6' },
+        allPokemonTypes,
         React.createElement(TableRow, { type: '0' }),
-        React.createElement(TableRow, { type: 'Bug' }),
-        React.createElement(TableRow, { type: 'Dark' }),
-        React.createElement(TableRow, { type: 'Dragon' }),
-        React.createElement(TableRow, { type: 'Electric' }),
-        React.createElement(TableRow, { type: 'Fairy' }),
-        React.createElement(TableRow, { type: 'Fighting' }),
-        React.createElement(TableRow, { type: 'Fire' }),
-        React.createElement(TableRow, { type: 'Flying' }),
-        React.createElement(TableRow, { type: 'Ghost' }),
-        React.createElement(TableRow, { type: 'Grass' }),
-        React.createElement(TableRow, { type: 'Ground' }),
-        React.createElement(TableRow, { type: 'Ice' }),
-        React.createElement(TableRow, { type: 'Normal' }),
-        React.createElement(TableRow, { type: 'Poison' }),
-        React.createElement(TableRow, { type: 'Psychic' }),
-        React.createElement(TableRow, { type: 'Rock' }),
-        React.createElement(TableRow, { type: 'Steel' }),
-        React.createElement(TableRow, { type: 'Water' })
+        React.createElement(TableRow, { type: 'Bug', list: bugList }),
+        React.createElement(TableRow, { type: 'Dark', list: darkList }),
+        React.createElement(TableRow, { type: 'Dragon', list: dragonList }),
+        React.createElement(TableRow, { type: 'Electric', list: electricList }),
+        React.createElement(TableRow, { type: 'Fairy', list: fairyList }),
+        React.createElement(TableRow, { type: 'Fighting', list: fightingList }),
+        React.createElement(TableRow, { type: 'Fire', list: fireList }),
+        React.createElement(TableRow, { type: 'Flying', list: flyingList }),
+        React.createElement(TableRow, { type: 'Ghost', list: ghostList }),
+        React.createElement(TableRow, { type: 'Grass', list: grassList }),
+        React.createElement(TableRow, { type: 'Ground', list: groundList }),
+        React.createElement(TableRow, { type: 'Ice', list: iceList }),
+        React.createElement(TableRow, { type: 'Normal', list: normalList }),
+        React.createElement(TableRow, { type: 'Poison', list: poisonList }),
+        React.createElement(TableRow, { type: 'Psychic', list: psychicList }),
+        React.createElement(TableRow, { type: 'Rock', list: rockList }),
+        React.createElement(TableRow, { type: 'Steel', list: steelList }),
+        React.createElement(TableRow, { type: 'Water', list: waterList })
       );
       return table; /*This is the end of return */
     }
@@ -346,6 +418,7 @@ var PokemonList = function (_React$Component5) {
       rn I have
       this.props.onPokemonUpdate  <--- this has the function that updates the state of the papa depending on the poke number we are
       */
+
       //Here we are creating a pokemon tag for every pokemon in our pokemon team list
       //every pokemon is getting a function that changes this parents (their grandparents) state
       listItems = pokemonTeam.map(function (pokemon, index) {
@@ -362,7 +435,7 @@ var PokemonList = function (_React$Component5) {
   }]);
 
   return PokemonList;
-}(React.Component); //This is the end of the pokemonlist file
+}(React.Component); //This is the end of the pokemonlist class
 
 var PokemonCard = function (_React$Component6) {
   _inherits(PokemonCard, _React$Component6);
@@ -397,7 +470,7 @@ var PokemonCard = function (_React$Component6) {
     key: 'removePokemonFunc',
     value: function removePokemonFunc() {
       this.setState({ isActive: false });
-      //every time we remove a pokemon we basically remove it by not giving it a type 
+      //every time we remove a pokemon we basically remove it by not giving it a type
       this.props.singlePokeUpdate(this.props.stateNum, '', '');
     }
   }, {
@@ -409,7 +482,7 @@ var PokemonCard = function (_React$Component6) {
       //Here we should check if this card is active. WHen the card is active we show the pokemon and when it is not we show just add pokemon button
       active = this.state.isActive;
       if (active) {
-        var type2 = this.props.type2;
+        var _type = this.props.type2;
         //Just putting nothing important in here but i have ot initialize it somehow you know what I am saying !?!
         secondTypeIcon = React.createElement(
           'p',
@@ -417,7 +490,7 @@ var PokemonCard = function (_React$Component6) {
           ' hi'
         );
         //If there is a type for the second type then we should make an icon that displays that .
-        if (type2 != "") {
+        if (_type != "") {
           secondTypeIcon = React.createElement(
             'span',
             { id: this.props.type2, 'class': ' border rounded border-dark typeCard' },

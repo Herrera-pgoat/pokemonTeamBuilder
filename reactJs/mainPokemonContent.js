@@ -189,7 +189,7 @@ class TableType extends React.Component{
     steelList = [];
     waterList = [];
 
-//getting all the pokemontypes and putting it in a variable that way I don't have to use this.props. ... 
+//getting all the pokemontypes and putting it in a variable that way I don't have to use this.props. ...
     const allPokemonTypes = this.props.pokeTypeInfo;
 
     for ( let i =0; i <6 ; i++){
@@ -227,7 +227,6 @@ class TableType extends React.Component{
 
     table = (
       <div class="col-sm-12 col-lg-6" >
-      {allPokemonTypes}
         <TableRow type="0"/>
         <TableRow type="Bug" list={bugList} />
         <TableRow type="Dark" list={darkList} />
@@ -262,27 +261,56 @@ class TableRow extends React.Component{
   render(){
     const type = this.props.type;
     let returnedRow;
+    //now we have this.props.list they are all named this.props.list
+    //so I iterate through the list and send the amount of times i see 0,.25..5.1.2.4 to each of the tablesquares
     if ( type != "0") {
+      //getting the count of each time one of the numbers I expect to appear appears.
+      let zeroCount = 0;
+      let oneFourthCount = 0;
+      let oneHalfCount = 0;
+      let oneCount = 0;
+      let twoCount = 0;
+      let fourCount = 0;
+
+      //getting the prop in a local variable
+      const typeList = this.props.list;
+
+      //this is like a for each loop in python. In all honesty if an interview asked me what the difference between this and a for each loop I wouldn't know what to say!
+      //going through each element in typeList which has type effectiveness of that move type versus my pokemons
+      for (const number of typeList){
+        if (number == 0)
+          ++zeroCount;
+          else if(number == .25)
+            ++oneFourthCount;
+          else if(number == .5)
+            ++oneHalfCount;
+          else if (number == 1)
+            ++oneCount;
+          else if (number == 2)
+            ++twoCount;
+          else if (number == 4)
+            ++fourCount;
+      }
       returnedRow = (
         <tr class="type" id={this.props.type} > {this.props.type}
-          <TableSquare word="Zero " />
-          <TableSquare word="Point 25" />
-          <TableSquare word="Point 5" />
-          <TableSquare word="Integer 1" />
-          <TableSquare word="Integer 2" />
-          <TableSquare word="Integer 4" />
+          <TableSquare word="Zero" total={zeroCount} />
+          <TableSquare word="Point 25" total={oneFourthCount}/>
+          <TableSquare word="Point 5" total={oneHalfCount}/>
+          <TableSquare word="Integer 1" total={oneCount}/>
+          <TableSquare word="Integer 2" total={twoCount}/>
+          <TableSquare word="Integer 4" total={fourCount}/>
         </tr>
       );
     }
     else{
       returnedRow = (
         <tr id="RowWeakness"> Strength of Hit
-            <td > 0x </td>
-            <td> 0.25x </td>
-            <td > 0.5x </td>
-            <td> 1x </td>
-            <td > 2x </td>
-            <td> 4x </td>
+            <td class="effectivenessSquare" > 0x </td>
+            <td class="effectivenessSquare"> 0.25x </td>
+            <td class="effectivenessSquare"> 0.5x </td>
+            <td class="effectivenessSquare"> 1x </td>
+            <td class="effectivenessSquare"> 2x </td>
+            <td class="effectivenessSquare"> 4x </td>
         </tr>
       );
     }
@@ -292,6 +320,7 @@ class TableRow extends React.Component{
   }
 }
 
+//class for each of my tablesquares
 class TableSquare extends React.Component{
   constructor(props){
     super(props);
@@ -300,7 +329,7 @@ class TableSquare extends React.Component{
 
   render(){
     return(
-        <td class="square"> {this.state.num} {this.props.word} </td>
+        <td class="square"> {this.props.total} </td>
     );
   }
 }

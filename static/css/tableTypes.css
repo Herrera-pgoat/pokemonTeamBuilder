@@ -6,6 +6,11 @@
 
 .square{
   border: 2px solid #282c34;
+  box-sizing:border-box;
+}
+
+.effectivenessSquare{
+  width:70px;
 }
 
 .typeCard{

@@ -229,7 +229,7 @@ var TableType = function (_React$Component2) {
       steelList = [];
       waterList = [];
 
-      //getting all the pokemontypes and putting it in a variable that way I don't have to use this.props. ... 
+      //getting all the pokemontypes and putting it in a variable that way I don't have to use this.props. ...
       var allPokemonTypes = this.props.pokeTypeInfo;
 
       for (var _i = 0; _i < 6; _i++) {
@@ -268,7 +268,6 @@ var TableType = function (_React$Component2) {
       table = React.createElement(
         'div',
         { 'class': 'col-sm-12 col-lg-6' },
-        allPokemonTypes,
         React.createElement(TableRow, { type: '0' }),
         React.createElement(TableRow, { type: 'Bug', list: bugList }),
         React.createElement(TableRow, { type: 'Dark', list: darkList }),
@@ -310,18 +309,58 @@ var TableRow = function (_React$Component3) {
     value: function render() {
       var type = this.props.type;
       var returnedRow = void 0;
+      //now we have this.props.list they are all named this.props.list
+      //so I iterate through the list and send the amount of times i see 0,.25..5.1.2.4 to each of the tablesquares
       if (type != "0") {
+        //getting the count of each time one of the numbers I expect to appear appears.
+        var zeroCount = 0;
+        var oneFourthCount = 0;
+        var oneHalfCount = 0;
+        var oneCount = 0;
+        var twoCount = 0;
+        var fourCount = 0;
+
+        //getting the prop in a local variable
+        var typeList = this.props.list;
+
+        //this is like a for each loop in python. In all honesty if an interview asked me what the difference between this and a for each loop I wouldn't know what to say!
+        //going through each element in typeList which has type effectiveness of that move type versus my pokemons
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = typeList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var number = _step.value;
+
+            if (number == 0) ++zeroCount;else if (number == .25) ++oneFourthCount;else if (number == .5) ++oneHalfCount;else if (number == 1) ++oneCount;else if (number == 2) ++twoCount;else if (number == 4) ++fourCount;
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
         returnedRow = React.createElement(
           'tr',
           { 'class': 'type', id: this.props.type },
           ' ',
           this.props.type,
-          React.createElement(TableSquare, { word: 'Zero ' }),
-          React.createElement(TableSquare, { word: 'Point 25' }),
-          React.createElement(TableSquare, { word: 'Point 5' }),
-          React.createElement(TableSquare, { word: 'Integer 1' }),
-          React.createElement(TableSquare, { word: 'Integer 2' }),
-          React.createElement(TableSquare, { word: 'Integer 4' })
+          React.createElement(TableSquare, { word: 'Zero', total: zeroCount }),
+          React.createElement(TableSquare, { word: 'Point 25', total: oneFourthCount }),
+          React.createElement(TableSquare, { word: 'Point 5', total: oneHalfCount }),
+          React.createElement(TableSquare, { word: 'Integer 1', total: oneCount }),
+          React.createElement(TableSquare, { word: 'Integer 2', total: twoCount }),
+          React.createElement(TableSquare, { word: 'Integer 4', total: fourCount })
         );
       } else {
         returnedRow = React.createElement(
@@ -330,32 +369,32 @@ var TableRow = function (_React$Component3) {
           ' Strength of Hit',
           React.createElement(
             'td',
-            null,
+            { 'class': 'effectivenessSquare' },
             ' 0x '
           ),
           React.createElement(
             'td',
-            null,
+            { 'class': 'effectivenessSquare' },
             ' 0.25x '
           ),
           React.createElement(
             'td',
-            null,
+            { 'class': 'effectivenessSquare' },
             ' 0.5x '
           ),
           React.createElement(
             'td',
-            null,
+            { 'class': 'effectivenessSquare' },
             ' 1x '
           ),
           React.createElement(
             'td',
-            null,
+            { 'class': 'effectivenessSquare' },
             ' 2x '
           ),
           React.createElement(
             'td',
-            null,
+            { 'class': 'effectivenessSquare' },
             ' 4x '
           )
         );
@@ -366,6 +405,9 @@ var TableRow = function (_React$Component3) {
 
   return TableRow;
 }(React.Component);
+
+//class for each of my tablesquares
+
 
 var TableSquare = function (_React$Component4) {
   _inherits(TableSquare, _React$Component4);
@@ -386,9 +428,7 @@ var TableSquare = function (_React$Component4) {
         'td',
         { 'class': 'square' },
         ' ',
-        this.state.num,
-        ' ',
-        this.props.word,
+        this.props.total,
         ' '
       );
     }

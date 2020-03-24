@@ -1,5 +1,5 @@
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static',filename='css/tableTypes.css') }}">
 
@@ -13,7 +13,13 @@
 	<div id="navbarPoke" style="background-color:#ff5253"></div> <!--This div tag with id navbarPoke will have the navbar in it -->
 	<body >
 
-	{% block content%}
+		<!--Here we are iterating through the flashed messages where we are putting any error messages
+	 		might not want it here tbh might want it in each page -->
+		{% for error in get_flashed_messages()  %}
+			<div class="col-sm-12 col-lg-2 text-center mx-auto error" > {{error}} </div>
+		{% endfor %}
+
+	{% block content %}
 
 	{% endblock %}
 

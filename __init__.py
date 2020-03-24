@@ -10,8 +10,6 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] ='jfieoajefij390uj8f93wji94u89893rwjf94'
-from . import pages
-app.register_blueprint(pages.bp)
 
 db_url = 'postgresql://{user}:{pw}@{url}/{db}'.format(user='postgres',pw='123456',url='localhost:5432',db='pokemonTeamProject')
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
@@ -19,8 +17,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-from . import models
-
+from . import models,pages 
+app.register_blueprint(pages.bp)
 #Won't lie I have no idea why the above works and the below does not but if some flask person would grace me with their knowledge I would appreciate it.
 #I really want to know what the difference is between the above and below. I mean I know below is a function and above is code we run once but still!!! what material differences are there!
 #Function Name :create_app

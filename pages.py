@@ -1,5 +1,9 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for
-
+#I need to import this stuff for the password checking and hashing
+from werkzeug.security import check_password_hash, generate_password_hash
+#importing for the database stuff
+from . import db
+from pokemonProject.models import User, PokeTeams, Pokemon
 #this is the blueprint for the website
 #This site is going to be so small that I probably didn't need a blueprint but I wanted to have all of my views in one place
 #the empty '' says that we don't want any of the views below prepended by any thing like /something then it would look like /something/about.html
@@ -14,7 +18,32 @@ def mainPage():
 #This is the register page
 @bp.route('/register',methods=['GET','POST'])
 def register():
-    #I should check whether the thing is get or post because now no matter what I am going here 
+    #If the user tried to create an account we enter here
+    if (request.method == 'POST'):
+        #Getting the information they put in from the form
+        username = request.form['usernameForm']
+        password = request.form['passwordForm']
+        passwordConfirm = request.form['passwordConfirmForm']
+        if(password == passwordConfirm):
+            #Here we should check whether the user exists already or not
+            user = User.query.filter_by(username=username).first()
+            if(user is None):
+                #If we enter this then no user of that name exists so we put this user in the tableTypes
+                #This is correctly adding the user to the user table with a hashed password. sha256 and salt
+                newUser = User(username= username,password_hash= generate_password_hash(password))
+                db.session.add(newUser)
+                db.session.commit()
+            else:
+                flash('That username already exists! Pick a new one!')
+            print('potoat')
+            #After we know that the user is real we should try to put them in the user #table
+        else:
+            #Flash is stores the message we pass as argument and sends what it stores
+            #to the register.html and in there I will put out a message that says what is in the flash !
+            flash('Passwords do not match')
+            #If we enter this one we should send an error and still go to register.html
+
+    #I should check whether the thing is get or post because now no matter what I am going here
     return render_template('/pokemonProjectPages/register.html')
     #we are right now not doing anything I just want to get the views in a Function
 

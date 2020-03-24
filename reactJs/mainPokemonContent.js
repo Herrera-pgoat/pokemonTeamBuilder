@@ -35,7 +35,7 @@ class PokemonMainContent extends React.Component{
   render(){
     //the div is a row that way neither pokemonList or TableType tries to go to the other row. THe row class confines it to current row unless I say otherwise
     return(
-      <div class=" row">
+      <div class="row">
           <PokemonList onPokemonUpdate={this.updatePoke} />
           <TableType pokeTypeInfo={[this.state.poke1,this.state.poke2,this.state.poke3,this.state.poke4,this.state.poke5,this.state.poke6]}/>
       </div>
@@ -291,26 +291,27 @@ class TableRow extends React.Component{
           else if (number == 4)
             ++fourCount;
       }
+      //Here I am sending all the squares the type of square it is that way when I look at it in react developer tools I know what I am looking at.
       returnedRow = (
         <tr class="type" id={this.props.type} > {this.props.type}
-          <TableSquare word="Zero" total={zeroCount} />
-          <TableSquare word="Point 25" total={oneFourthCount}/>
-          <TableSquare word="Point 5" total={oneHalfCount}/>
-          <TableSquare word="Integer 1" total={oneCount}/>
-          <TableSquare word="Integer 2" total={twoCount}/>
-          <TableSquare word="Integer 4" total={fourCount}/>
+          <TableSquare type={this.props.type} word="Zero" total={zeroCount} />
+          <TableSquare type={this.props.type} word="Point 25" total={oneFourthCount}/>
+          <TableSquare type={this.props.type} word="Point 5" total={oneHalfCount}/>
+          <TableSquare type={this.props.type} word="Integer 1" total={oneCount}/>
+          <TableSquare type={this.props.type} word="Integer 2" total={twoCount}/>
+          <TableSquare type={this.props.type} word="Integer 4" total={fourCount}/>
         </tr>
       );
     }
     else{
       returnedRow = (
         <tr id="RowWeakness"> Strength of Hit
-            <td class="effectivenessSquare" > 0x </td>
-            <td class="effectivenessSquare"> 0.25x </td>
-            <td class="effectivenessSquare"> 0.5x </td>
-            <td class="effectivenessSquare"> 1x </td>
-            <td class="effectivenessSquare"> 2x </td>
-            <td class="effectivenessSquare"> 4x </td>
+            <td class="effectivenessSquare text-center" > 0x </td>
+            <td class="effectivenessSquare text-center"> 0.25x </td>
+            <td class="effectivenessSquare text-center"> 0.5x </td>
+            <td class="effectivenessSquare text-center"> 1x </td>
+            <td class="effectivenessSquare text-center"> 2x </td>
+            <td class="effectivenessSquare text-center"> 4x </td>
         </tr>
       );
     }
@@ -324,7 +325,6 @@ class TableRow extends React.Component{
 class TableSquare extends React.Component{
   constructor(props){
     super(props);
-    this.state = {num : 0};
   }
 
   render(){
@@ -342,6 +342,7 @@ class PokemonList extends React.Component{
 
   render(){
     //List of all the pokemon we are going to have in the team
+    //when I do connect the database I need to update this list any time they add a pokemon.
     pokemonTeam= [['Tyranitar',"Dark","Rock"],["Garchomp","Dragon","Ground"],["Greninja","Water","Dark"],["Charizard","Fire","Flying"],["Alakazam","Psychic",""],["Infernape","Fire","Fighting"]];
 
     /*

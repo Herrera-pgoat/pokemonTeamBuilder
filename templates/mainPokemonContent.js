@@ -57,7 +57,7 @@ var PokemonMainContent = function (_React$Component) {
       //the div is a row that way neither pokemonList or TableType tries to go to the other row. THe row class confines it to current row unless I say otherwise
       return React.createElement(
         'div',
-        { 'class': ' row' },
+        { 'class': 'row' },
         React.createElement(PokemonList, { onPokemonUpdate: this.updatePoke }),
         React.createElement(TableType, { pokeTypeInfo: [this.state.poke1, this.state.poke2, this.state.poke3, this.state.poke4, this.state.poke5, this.state.poke6] })
       );
@@ -335,6 +335,7 @@ var TableRow = function (_React$Component3) {
 
             if (number == 0) ++zeroCount;else if (number == .25) ++oneFourthCount;else if (number == .5) ++oneHalfCount;else if (number == 1) ++oneCount;else if (number == 2) ++twoCount;else if (number == 4) ++fourCount;
           }
+          //Here I am sending all the squares the type of square it is that way when I look at it in react developer tools I know what I am looking at.
         } catch (err) {
           _didIteratorError = true;
           _iteratorError = err;
@@ -355,12 +356,12 @@ var TableRow = function (_React$Component3) {
           { 'class': 'type', id: this.props.type },
           ' ',
           this.props.type,
-          React.createElement(TableSquare, { word: 'Zero', total: zeroCount }),
-          React.createElement(TableSquare, { word: 'Point 25', total: oneFourthCount }),
-          React.createElement(TableSquare, { word: 'Point 5', total: oneHalfCount }),
-          React.createElement(TableSquare, { word: 'Integer 1', total: oneCount }),
-          React.createElement(TableSquare, { word: 'Integer 2', total: twoCount }),
-          React.createElement(TableSquare, { word: 'Integer 4', total: fourCount })
+          React.createElement(TableSquare, { type: this.props.type, word: 'Zero', total: zeroCount }),
+          React.createElement(TableSquare, { type: this.props.type, word: 'Point 25', total: oneFourthCount }),
+          React.createElement(TableSquare, { type: this.props.type, word: 'Point 5', total: oneHalfCount }),
+          React.createElement(TableSquare, { type: this.props.type, word: 'Integer 1', total: oneCount }),
+          React.createElement(TableSquare, { type: this.props.type, word: 'Integer 2', total: twoCount }),
+          React.createElement(TableSquare, { type: this.props.type, word: 'Integer 4', total: fourCount })
         );
       } else {
         returnedRow = React.createElement(
@@ -369,32 +370,32 @@ var TableRow = function (_React$Component3) {
           ' Strength of Hit',
           React.createElement(
             'td',
-            { 'class': 'effectivenessSquare' },
+            { 'class': 'effectivenessSquare text-center' },
             ' 0x '
           ),
           React.createElement(
             'td',
-            { 'class': 'effectivenessSquare' },
+            { 'class': 'effectivenessSquare text-center' },
             ' 0.25x '
           ),
           React.createElement(
             'td',
-            { 'class': 'effectivenessSquare' },
+            { 'class': 'effectivenessSquare text-center' },
             ' 0.5x '
           ),
           React.createElement(
             'td',
-            { 'class': 'effectivenessSquare' },
+            { 'class': 'effectivenessSquare text-center' },
             ' 1x '
           ),
           React.createElement(
             'td',
-            { 'class': 'effectivenessSquare' },
+            { 'class': 'effectivenessSquare text-center' },
             ' 2x '
           ),
           React.createElement(
             'td',
-            { 'class': 'effectivenessSquare' },
+            { 'class': 'effectivenessSquare text-center' },
             ' 4x '
           )
         );
@@ -415,10 +416,7 @@ var TableSquare = function (_React$Component4) {
   function TableSquare(props) {
     _classCallCheck(this, TableSquare);
 
-    var _this4 = _possibleConstructorReturn(this, (TableSquare.__proto__ || Object.getPrototypeOf(TableSquare)).call(this, props));
-
-    _this4.state = { num: 0 };
-    return _this4;
+    return _possibleConstructorReturn(this, (TableSquare.__proto__ || Object.getPrototypeOf(TableSquare)).call(this, props));
   }
 
   _createClass(TableSquare, [{
@@ -452,6 +450,7 @@ var PokemonList = function (_React$Component5) {
       var _this6 = this;
 
       //List of all the pokemon we are going to have in the team
+      //when I do connect the database I need to update this list any time they add a pokemon.
       pokemonTeam = [['Tyranitar', "Dark", "Rock"], ["Garchomp", "Dragon", "Ground"], ["Greninja", "Water", "Dark"], ["Charizard", "Fire", "Flying"], ["Alakazam", "Psychic", ""], ["Infernape", "Fire", "Fighting"]];
 
       /*

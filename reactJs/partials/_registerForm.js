@@ -35,11 +35,11 @@ class RegisterForm extends React.Component{
         					</div>
         					<div class="form-group">
           				  <label for="passwordForm">Password </label>
-        						<input type="password" class="form-control" value={this.state.pwText} onChange={this.handleChange} name="passwordForm" id="passwordForm" placeholder="Enter Password" required/>
+        						<input type="password" class="form-control" value={this.state.passwordForm} onChange={this.handleChange} name="passwordForm" id="passwordForm" placeholder="Enter Password" required/>
         					</div>
         					<div class="form-group">
         					  <label for="passwordConfirmForm">Confirm Password </label>
-        						<input type="password" class="form-control" value={this.state.pwTextConfirm} onChange={this.handleChange} name="passwordConfirmForm" id="passwordConfirmForm" placeholder="Confirm Password"  required />
+        						<input type="password" class="form-control" value={this.state.passwordConfirmForm} onChange={this.handleChange} name="passwordConfirmForm" id="passwordConfirmForm" placeholder="Confirm Password"  required />
                   </div>
                   {/* 					<!-- Submitting the form  --> */}
         					<input type="submit" class="btn" value="Create Account" name="submit" style={{backgroundColor:'#30a7d7'}}  />
@@ -51,4 +51,4 @@ class RegisterForm extends React.Component{
     }//end of render function
 }//end of RegisterForm class
 
-ReactDOM.render( <RegisterForm />,   document.getElementById('registerForm') );
+ReactDOM.render(<RegisterForm />, document.getElementById('registerForm'));

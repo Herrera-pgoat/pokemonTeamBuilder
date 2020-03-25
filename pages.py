@@ -12,6 +12,27 @@ bp = Blueprint('', __name__)
 #This is the main page so we don't have any slashes we just go to main place domain
 @bp.route('/',methods=['GET','POST'])
 def mainPage():
+    #on a post I expect to have logged in so I will try to log them in
+    if( request.method =="POST"):
+        #We are in a post method which means they tried to log in
+        #I need to check for the user name they put in and if the password they put in matches the password with that username
+        username = request.form['userLogin']
+        password = request.form['passwordLogin']
+
+        user = User.query.filter_by(username=username).first()
+        if(user is None):
+            #That username is not in the db so they can't log in
+            flash("That username is not in the database. Try creating an account!")
+        elif (check_password_hash(user.password_hash,password)):
+            #The username is in the database and the password matches
+            session.clear()
+            session['username'] = username
+            return redirect(url_for('.mainPage'))
+
+            #if we are here then the user is 'logged in'
+        else:
+            flash("The password does not match the usernames")
+
     return render_template('/pokemonProjectPages/home.html')
     #we are going to return to the main index screen where
 
@@ -35,7 +56,6 @@ def register():
                 db.session.commit()
             else:
                 flash('That username already exists! Pick a new one!')
-            print('potoat')
             #After we know that the user is real we should try to put them in the user #table
         else:
             #Flash is stores the message we pass as argument and sends what it stores
@@ -51,3 +71,17 @@ def register():
 def aboutPage():
     return render_template('/pokemonProjectPages/about.html')
     #we will return the about page here
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('.mainPage'))
+
+@bp.before_app_request
+def load_logged_in_user():
+    username = session.get('username')
+
+    if username is None:
+        g.user = None
+    else:
+        g.user = User.query.filter_by(username=username).first()

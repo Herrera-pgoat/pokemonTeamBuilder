@@ -27,6 +27,10 @@
   border:2px solid #ca4544;
 }
 
+.loginThing{
+  padding:10px;
+}
+
 #RowWeakness {
   background-color: #282c34;
   margin-left:5px;

@@ -19,6 +19,10 @@
 			<div class="col-sm-12 col-lg-2 text-center mx-auto error" > {{error}} </div>
 		{% endfor %}
 
+		{% if g.user%}
+			<div> hell you are logged in o </div>
+		{% endif %}
+
 	{% block content %}
 
 	{% endblock %}
@@ -32,6 +36,14 @@
 <!--What this does is let the jinja2 template engine go through my react stuff before it is loaded that way I can use jinja2 in my react stuff -->
 	<script type="text/javascript">
 	  {% include "partials/_navbar.js" %}
+		{%if g.user %}//basically this is a jank way to check if they are logged in and load in certain stuff depending on if they are
+		//I will send in a prop that will load different stuff depending on the value of a prop
+			const e = React.createElement;
+			ReactDOM.render( e(NavbarPoke,{ logIn: 'True',username:"{{g.user['username']}}"}),   document.getElementById('navbarPoke') );
+		{% else %}
+			const e = React.createElement;
+			ReactDOM.render( e(NavbarPoke,{ logIn: 'False' }),   document.getElementById('navbarPoke') );
+		{% endif %}
 	</script>
 
 </html>

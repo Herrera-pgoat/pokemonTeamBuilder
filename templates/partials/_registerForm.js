@@ -73,7 +73,7 @@ var RegisterForm = function (_React$Component) {
                   { 'for': 'passwordForm' },
                   'Password '
                 ),
-                React.createElement('input', { type: 'password', 'class': 'form-control', value: this.state.pwText, onChange: this.handleChange, name: 'passwordForm', id: 'passwordForm', placeholder: 'Enter Password', required: true })
+                React.createElement('input', { type: 'password', 'class': 'form-control', value: this.state.passwordForm, onChange: this.handleChange, name: 'passwordForm', id: 'passwordForm', placeholder: 'Enter Password', required: true })
               ),
               React.createElement(
                 'div',
@@ -83,7 +83,7 @@ var RegisterForm = function (_React$Component) {
                   { 'for': 'passwordConfirmForm' },
                   'Confirm Password '
                 ),
-                React.createElement('input', { type: 'password', 'class': 'form-control', value: this.state.pwTextConfirm, onChange: this.handleChange, name: 'passwordConfirmForm', id: 'passwordConfirmForm', placeholder: 'Confirm Password', required: true })
+                React.createElement('input', { type: 'password', 'class': 'form-control', value: this.state.passwordConfirmForm, onChange: this.handleChange, name: 'passwordConfirmForm', id: 'passwordConfirmForm', placeholder: 'Confirm Password', required: true })
               ),
               React.createElement('input', { type: 'submit', 'class': 'btn', value: 'Create Account', name: 'submit', style: { backgroundColor: '#30a7d7' } })
             )

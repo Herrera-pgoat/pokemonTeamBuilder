@@ -5,7 +5,6 @@ from . import db
 class User(db.Model):
     username = db.Column(db.String(64),primary_key=True, index=True, unique=True)
     password_hash = db.Column(db.String(256))
-    password_salt = db.Column(db.String(128))
     pokemonTeams = db.relationship('PokeTeams',backref='user',lazy=True)
 
     def __repr__(self):
@@ -27,8 +26,9 @@ class PokeTeams(db.Model):
         return '<User {}> '.format(self.username)
 
 class Pokemon(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     #longest pokemon name is 11 and it is fletchinder or something like that
-    pokemonName = db.Column(db.String(20), primary_key=True)
+    pokemonName = db.Column(db.String(20))
     #The longest pokemon type name is 8
     type1 = db.Column(db.String(10))
     type2 = db.Column(db.String(10))

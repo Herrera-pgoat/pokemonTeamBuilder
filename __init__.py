@@ -17,8 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-from . import models,pages 
+from . import models,pages,newCommands
 app.register_blueprint(pages.bp)
+app.register_blueprint(newCommands.bp)
 #Won't lie I have no idea why the above works and the below does not but if some flask person would grace me with their knowledge I would appreciate it.
 #I really want to know what the difference is between the above and below. I mean I know below is a function and above is code we run once but still!!! what material differences are there!
 #Function Name :create_app

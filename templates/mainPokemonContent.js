@@ -11,7 +11,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 //So first thought is to have the pokemonList contain a list of the pokemoncards and we will
 //increase or decrease the number of cards through the button in the pokemoncard ??
 //https://clips.twitch.tv/AverageGeniusMinkMingLee leffen likes toradora
-
 var PokemonMainContent = function (_React$Component) {
   _inherits(PokemonMainContent, _React$Component);
 
@@ -441,18 +440,43 @@ var PokemonList = function (_React$Component5) {
   function PokemonList(props) {
     _classCallCheck(this, PokemonList);
 
-    return _possibleConstructorReturn(this, (PokemonList.__proto__ || Object.getPrototypeOf(PokemonList)).call(this, props));
+    var _this5 = _possibleConstructorReturn(this, (PokemonList.__proto__ || Object.getPrototypeOf(PokemonList)).call(this, props));
+
+    _this5.updatePokeTeam = _this5.updatePokeTeam.bind(_this5);
+    _this5.state = {
+      pokemonTeam: [['Tyranitar', "Dark", "Rock"], ["Garchomp", "Dragon", "Ground"], ["Greninja", "Water", "Dark"], ["Charizard", "Fire", "Flying"], ["Alakazam", "Psychic", ""], ["Infernape", "Fire", "Fighting"]],
+      poke2: ['', ''],
+      poke3: ['', ''],
+      poke4: ['', ''],
+      poke5: ['', ''],
+      poke6: ['', '']
+    };
+    return _this5;
   }
 
   _createClass(PokemonList, [{
+    key: 'updatePokeTeam',
+    value: function updatePokeTeam(name, type1, type2, index) {
+      pokemonTeamThing = this.state.pokemonTeam;
+      pokemonTeamThing[index][0] = name;
+      pokemonTeamThing[index][1] = type1;
+      pokemonTeamThing[index][2] = type2;
+      this.setState({
+        pokemonTeam: pokemonTeamThing
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this6 = this;
 
       //List of all the pokemon we are going to have in the team
       //when I do connect the database I need to update this list any time they add a pokemon.
-      pokemonTeam = [['Tyranitar', "Dark", "Rock"], ["Garchomp", "Dragon", "Ground"], ["Greninja", "Water", "Dark"], ["Charizard", "Fire", "Flying"], ["Alakazam", "Psychic", ""], ["Infernape", "Fire", "Fighting"]];
-
+      pokemonTeam = this.state.pokemonTeam;
+      //I need an update function that I send to each pokemon card that when you push the enter thing we
+      //update the pokemonTeam variable
+      //That way we get the correct type and names. We have a json file that gives us the name and then with the name we get the types
+      //I must make sure that they type out the correct name or else it won't work
       /*
       rn I have
       this.props.onPokemonUpdate  <--- this has the function that updates the state of the papa depending on the poke number we are
@@ -462,7 +486,7 @@ var PokemonList = function (_React$Component5) {
       //every pokemon is getting a function that changes this parents (their grandparents) state
       listItems = pokemonTeam.map(function (pokemon, index) {
         increasedIndex = index + 1;
-        return React.createElement(PokemonCard, { name: pokemon[0], type1: pokemon[1], type2: pokemon[2], stateNum: "poke" + increasedIndex, singlePokeUpdate: _this6.props.onPokemonUpdate });
+        return React.createElement(PokemonCard, { index: index, newid: 'addPokemon' + increasedIndex, name: pokemon[0], type1: pokemon[1], type2: pokemon[2], stateNum: "poke" + increasedIndex, singlePokeUpdate: _this6.props.onPokemonUpdate, pokeTeamUpdate: _this6.updatePokeTeam });
       });
 
       return React.createElement(
@@ -484,10 +508,14 @@ var PokemonCard = function (_React$Component6) {
 
     var _this7 = _possibleConstructorReturn(this, (PokemonCard.__proto__ || Object.getPrototypeOf(PokemonCard)).call(this, props));
 
-    _this7.state = { isActive: false };
+    _this7.state = {
+      isActive: false,
+      pokeName: ''
+    };
     //binding the function to this place
     _this7.addPokemonFunc = _this7.addPokemonFunc.bind(_this7);
     _this7.removePokemonFunc = _this7.removePokemonFunc.bind(_this7);
+    _this7.changeText = _this7.changeText.bind(_this7);
     return _this7;
   }
 
@@ -497,10 +525,23 @@ var PokemonCard = function (_React$Component6) {
   _createClass(PokemonCard, [{
     key: 'addPokemonFunc',
     value: function addPokemonFunc() {
-      this.setState({ isActive: true });
-      //not just that but I need to update the grandparents state to tell them that I must do this
-      //updateing the grandparents state with the new pokemon type we have every time we add a pokemon
-      this.props.singlePokeUpdate(this.props.stateNum, this.props.type1, this.props.type2);
+      //pokeStuff <____ -- that has the pokemon names with the types and stuff too nice
+
+      //I will first check if the pokemonName is indeed a pokemon name
+      //then if it is a pokemon name then I will do the changes
+      //and if it is not then I might do nothing or put a message
+      if (pokeStuff.hasOwnProperty(this.state.pokeName)) {
+        this.setState({ isActive: true });
+        //not just that but I need to update the grandparents state to tell them that I must do this
+        //updateing the grandparents state with the new pokemon type we have every time we add a pokemon
+        type1 = pokeStuff[this.state.pokeName][0]['Type1'];
+        type2 = pokeStuff[this.state.pokeName][0]['Type2'];
+        this.props.singlePokeUpdate(this.props.stateNum, type1, type2);
+        this.props.pokeTeamUpdate(this.state.pokeName, type1, type2, this.props.index);
+        console.log(pokeStuff[this.state.pokeName]);
+      } else {
+        console.log('Not a valid pokemon name');
+      }
     }
 
     //creating a function to change the state of a pokemon to false when we choose to remove a pokemon. I typed out this whole comment again even though it is almost identical to the other one.
@@ -511,6 +552,12 @@ var PokemonCard = function (_React$Component6) {
       this.setState({ isActive: false });
       //every time we remove a pokemon we basically remove it by not giving it a type
       this.props.singlePokeUpdate(this.props.stateNum, '', '');
+    }
+  }, {
+    key: 'changeText',
+    value: function changeText(event) {
+      //we will pass in the name and use it to change the value of the text thing
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
     }
   }, {
     key: 'render',
@@ -593,10 +640,10 @@ var PokemonCard = function (_React$Component6) {
                 null,
                 React.createElement(
                   'label',
-                  { 'for': 'addPokemon' },
+                  { 'for': this.props.newid },
                   ' Add Pokemon '
                 ),
-                React.createElement('input', { id: 'addPokemon', type: 'text', 'class': '', placeholder: 'Type Pokemon Name!' })
+                React.createElement('input', { name: 'pokeName', id: this.props.newid, type: 'text', 'class': '', value: this.state.pokeName, onChange: this.changeText, placeholder: 'Type Pokemon Name!' })
               ),
               React.createElement(
                 'button',

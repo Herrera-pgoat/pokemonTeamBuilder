@@ -6,22 +6,32 @@
 		<!-- I am going to want to have this column disappear when we are on mobile devices. I don't know if this part will need to be in react but it might. But just becasue something is possible
 				doesn't mean that its worth doing -->
 		<div class="col-lg-1" style="">
-			feoiaj
 		</div>
 		<!-- This is the column space that useres will be able to select pokemon to their team. This will be in React-->
-			<div class="col-lg-11 col-12" id="pokemons"> </div>
-
-		<!--This is where there will be a table that has the type stuff in it. The table will be in react  -->
-		<!-- <div class="col-12 col-lg-6" style="">
-			<p> This side will be the table </p>
-			<div id="table"> </div>
-			<!--Right here we will put in the tabl ething -->
-		<!-- </div>
-	</div> -->
+    <!--This is where there will be a table that has the type stuff in it. The table will be in react  -->
+<!--Turns out I put them both in here! -->
+	<div class="col-lg-11 col-12" id="pokemons"> </div>
 
 	<script type="text/javascript">
 		{% include "mainPokemonContent.js" %}
-	</script>
+    {% include "autocompleteJavascript.js" %}
 
+    var pokemonList = [];
+    //All the json stuff is in pokeStuff so I am getting it in here
+    pokeStuff = {{pokeStuff|tojson}}
+    //adding each pokemon thing to the list that way we can autocomplete on the pokemon name
+    for (var pokemonName in pokeStuff){
+      pokemonList.push( pokemonName )
+      // console.log( pokemonName )
+    }
+
+    //Giving autocomppltet to all the inputs in the pokemon thing field
+    autocomplete(document.getElementById('addPokemon1'), pokemonList);
+    autocomplete(document.getElementById('addPokemon2'), pokemonList);
+    autocomplete(document.getElementById('addPokemon3'), pokemonList);
+    autocomplete(document.getElementById('addPokemon4'), pokemonList);
+    autocomplete(document.getElementById('addPokemon5'), pokemonList);
+    autocomplete(document.getElementById('addPokemon6'), pokemonList);
+	</script>
 
 {% endblock %}

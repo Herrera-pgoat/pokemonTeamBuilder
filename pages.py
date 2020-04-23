@@ -3,6 +3,8 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 from werkzeug.security import check_password_hash, generate_password_hash
 #importing for the database stuff
 from . import db
+import os
+import json
 from pokemonProject.models import User, PokeTeams, Pokemon
 #this is the blueprint for the website
 #This site is going to be so small that I probably didn't need a blueprint but I wanted to have all of my views in one place
@@ -12,6 +14,8 @@ bp = Blueprint('', __name__)
 #This is the main page so we don't have any slashes we just go to main place domain
 @bp.route('/',methods=['GET','POST'])
 def mainPage():
+    #No matter what I am going to send a list of all the pokemon I have from the database
+    allPokemon = Pokemon.query.filter_by().all()
     #on a post I expect to have logged in so I will try to log them in
     if( request.method =="POST"):
         #We are in a post method which means they tried to log in
@@ -27,13 +31,19 @@ def mainPage():
             #The username is in the database and the password matches
             session.clear()
             session['username'] = username
-            return redirect(url_for('.mainPage'))
+            return redirect(url_for('.mainPage'), allPokemon=allPokemon)
 
             #if we are here then the user is 'logged in'
         else:
             flash("The password does not match the usernames")
 
-    return render_template('/pokemonProjectPages/home.html')
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, 'pokemonList.json')
+    with open(my_file, 'r') as myfile:
+        data=myfile.read()
+    #THis is the json file with all the item names
+    pokemonInformation = json.loads(data)
+    return render_template('/pokemonProjectPages/home.html',allPokemon=allPokemon,pokeStuff=pokemonInformation)
     #we are going to return to the main index screen where
 
 #This is the register page

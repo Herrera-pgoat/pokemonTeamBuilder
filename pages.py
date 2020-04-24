@@ -20,12 +20,9 @@ def mainPage():
     if not(username is None):
         #I should query the database that way I can get the team that I have saved
         pokeTeam = PokeTeams.query.filter_by(username=username).first()
-        pokemonTeam.append(pokeTeam.pokemonName1)
-        pokemonTeam.append(pokeTeam.pokemonName2)
-        pokemonTeam.append(pokeTeam.pokemonName3)
-        pokemonTeam.append(pokeTeam.pokemonName4)
-        pokemonTeam.append(pokeTeam.pokemonName5)
-        pokemonTeam.append(pokeTeam.pokemonName6)
+        if not(pokeTeam is None):
+            return loadTeam(username,pokeTeam.pokemonTeamName)
+
 
     else:
         print('hello')
@@ -94,8 +91,8 @@ def register():
     #we are right now not doing anything I just want to get the views in a Function
 
 #this route is saving teams to the
-@bp.route('/saveTeam',methods=['GET','POST'])
-def saveTeam():
+@bp.route('/saveTeam/<string:team_name>',methods=['GET','POST'])
+def saveTeam(team_name):
     #if we are post then we are going save a team
     if (request.method == 'POST'):
         #getting the username of the user
@@ -106,9 +103,9 @@ def saveTeam():
             flash('You are not signed in. Try signing in!')
             return render_template('/pokemonProjectPages/about.html')
 
-        pokeTeamUser = PokeTeams.query.filter_by(username=username,pokemonTeamName='test').first()
+        pokeTeamUser = PokeTeams.query.filter_by(username=username,pokemonTeamName=team_name).first()
         if not(pokeTeamUser is None):
-            flash('You already have a pokemon team named that try something else')
+            flash('You already have a pokemon team named {}. Try something else'.format(team_name))
             return render_template('/pokemonProjectPages/about.html')
         #getting the name of every pokemon
         pokeName1 = request.form['poke1']
@@ -119,7 +116,7 @@ def saveTeam():
         pokeName6 = request.form['poke6']
 
         #creating a pokemon team then adding it to the database
-        newPokeTeam = PokeTeams(username= username,pokemonTeamName='test',pokemonName1=pokeName1,pokemonName2=pokeName2,pokemonName3=pokeName3,pokemonName4=pokeName4,pokemonName5=pokeName5,pokemonName6=pokeName6)
+        newPokeTeam = PokeTeams(username= username,pokemonTeamName=team_name,pokemonName1=pokeName1,pokemonName2=pokeName2,pokemonName3=pokeName3,pokemonName4=pokeName4,pokemonName5=pokeName5,pokemonName6=pokeName6)
         db.session.add(newPokeTeam)
         db.session.commit()
 
@@ -130,10 +127,86 @@ def saveTeam():
         #THis is the json file with all the item names
         pokemonInformation = json.loads(data)
 
-        return redirect(url_for('.mainPage',pokeStuff=pokemonInformation))
+        return redirect(url_for('.mainPage'))
     else:
         flash("I have no idea how you got there but don't try it again ")
         return redirect(url_for('.aboutPage'))
+
+#this route is saving teams to the
+@bp.route('/updateTeam/<string:team_name>',methods=['GET','POST'])
+def updateTeam(team_name):
+    #if we are post then we are going save a team
+    if (request.method == 'POST'):
+        #getting the username of the user
+        username = session.get('username')
+
+        #if they are not signed in as a user then we take them to about and flash a message
+        if (username is None):
+            flash('You are not signed in. Try signing in!')
+            return render_template('/pokemonProjectPages/about.html')
+
+        pokeTeamUser = PokeTeams.query.filter_by(username=username,pokemonTeamName=team_name).first()
+
+        #getting the name of every pokemon
+        pokeName1 = request.form['poke1']
+        pokeName2 = request.form['poke2']
+        pokeName3 = request.form['poke3']
+        pokeName4 = request.form['poke4']
+        pokeName5 = request.form['poke5']
+        pokeName6 = request.form['poke6']
+
+        #updating the name of every pokemon in the team just incase there were changes
+        pokeTeamUser.pokemonName1 = pokeName1
+        pokeTeamUser.pokemonName2 = pokeName2
+        pokeTeamUser.pokemonName3 = pokeName3
+        pokeTeamUser.pokemonName4 = pokeName4
+        pokeTeamUser.pokemonName5 = pokeName5
+        pokeTeamUser.pokemonName6 = pokeName6
+
+        #Updating the database with this new information
+        db.session.commit()
+        return redirect(url_for('.loadTeam',username=username,team_name=team_name))
+    else:
+        flash("I have no idea how you got there but don't try it again ")
+        return redirect(url_for('.aboutPage'))
+
+@bp.route('/<string:username>/<string:team_name>',methods=['GET','POST'])
+def loadTeam(username,team_name):
+    #I have the username and the teamname so I am going to load in this usernames team
+    username = session.get('username')
+
+    #if they are not signed in as a user then we take them to about and flash a message
+    if (username is None):
+        flash('You are not signed in. Try signing in!')
+        return render_template('/pokemonProjectPages/about.html')
+
+    #bring in all the pokemon after we know we are at least going to the main page
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, 'pokemonList.json')
+    with open(my_file, 'r') as myfile:
+        data=myfile.read()
+    pokemonInformation = json.loads(data)
+
+    pokemonTeam = []
+    pokeTeamUser = PokeTeams.query.filter_by(username=username,pokemonTeamName=team_name).first()
+    allPokeTeams = PokeTeams.query.filter_by(username=username).all()
+    pokemonTeamNames = []
+    #getting the name of all pokemon teams this user has
+    for pokeTeam in allPokeTeams:
+        pokemonTeamNames.append(pokeTeam.pokemonTeamName)
+        print(pokeTeam.pokemonTeamName)
+    #if we don't find a team with this thing loaded in
+    if (pokeTeamUser is None):
+        return render_template('/pokemonProjectPages/home.html',pokeStuff=pokemonInformation,pokeTeam=pokemonTeam,allPokeTeams=pokemonTeamNames,teamName=team_name)
+    else:
+        #we did find a team with the user stuff in it
+        pokemonTeam.append(pokeTeamUser.pokemonName1)
+        pokemonTeam.append(pokeTeamUser.pokemonName2)
+        pokemonTeam.append(pokeTeamUser.pokemonName3)
+        pokemonTeam.append(pokeTeamUser.pokemonName4)
+        pokemonTeam.append(pokeTeamUser.pokemonName5)
+        pokemonTeam.append(pokeTeamUser.pokemonName6)
+        return render_template('/pokemonProjectPages/home.html',pokeStuff=pokemonInformation,pokeTeam=pokemonTeam,allPokeTeams=pokemonTeamNames,teamName=team_name)
 
 
 @bp.route('/about',methods=['GET'])

@@ -357,10 +357,14 @@ class PokemonList extends React.Component{
   constructor(props){
     super(props);
     this.updatePokeTeam = this.updatePokeTeam.bind(this);
+    this.changeText = this.changeText.bind(this);
     this.state={
       //the format is [name type1 type2] for each poekmon in pokemon team
       pokemonTeam : [['',"",""],["","",""],["","",""],["","",""],["","",""],["","",""]],
-      saveTeamForm:"{{url_for('.saveTeam')}}",
+      saveTeamFormat:"{{url_for('.saveTeam',team_name='' )}}",
+      updateTeamFormat:"{{url_for('.updateTeam',team_name=teamName )}}",
+      saveTeamURL:'',
+      newPokeTeamName:'',
     }
     //this is the pokemon team we got from the user if we got one
     pokemonListTeam = this.props.pokemonList
@@ -390,6 +394,14 @@ class PokemonList extends React.Component{
        pokemonTeam:pokemonTeamThing
     });
   }
+
+  changeText(event){
+    //we will pass in the name and use it to change the value of the text thing
+    this.setState({ [event.target.name]:event.target.value});
+    urlNameFormat = this.state.saveTeamFormat;
+    urlNameFormat = urlNameFormat+ event.target.value
+    this.setState({saveTeamURL:urlNameFormat})
+  }
   render(){
     //List of all the pokemon we are going to have in the team
     pokemonTeam = this.state.pokemonTeam
@@ -405,19 +417,33 @@ class PokemonList extends React.Component{
     //Only showing the button when we are logged in
     var form = <div> </div>
     if (login){
-      //I am going to need to make this a form and then I am going to have to
-      //send this stuff somewhere to save the information. A flask location that ultimately takes us to the same place we are now
-      form =  (
-        <div>
-        <form action={this.state.saveTeamForm} method="POST" >
-
+      input = (
+        <span>
           <input hidden name="poke1" id="poke1" type="text" value={this.state.pokemonTeam[0][0]}  />
           <input hidden name="poke2" id="poke2" type="text" value={this.state.pokemonTeam[1][0]}   />
           <input hidden name="poke3" id="poke3" type="text" value={this.state.pokemonTeam[2][0]}  />
           <input hidden name="poke4" id="poke4" type="text" value={this.state.pokemonTeam[3][0]} />
           <input hidden name="poke5" id="poke5" type="text" value={this.state.pokemonTeam[4][0]}  />
           <input hidden name="poke6" id="poke6" type="text" value={this.state.pokemonTeam[5][0]}  />
-          <input type="submit" class="btn bg-primary" value="Save team" name="submit"/>
+        </span>
+      );
+      //I am going to need to make this a form and then I am going to have to
+      //send this stuff somewhere to save the information. A flask location that ultimately takes us to the same place we are now
+      newTeamForm =  (
+        <span>
+        <form action={this.state.saveTeamURL} method="POST" >
+          {input}
+          <input name="newPokeTeamName" id="newPokeTeamName" type="text" value={this.state.newPokeTeamName} onChange={this.changeText}  placeholder='Enter new team name'  />
+          <input type="submit" class="btn bg-primary" value="Create New Team" name="submit"/>
+        </form>
+        </span>
+      );
+      updateTeamForm =  (
+        <div>
+        <form action={this.state.updateTeamFormat} method="POST" >
+          {input}
+          <input hidden hidden name="updatingTeam" id="updatingTeam" type="text" value='{{teamName}}' />
+          <input type="submit" class="btn bg-primary" value="Update This Team" name="submit"/>
         </form>
         </div>
       );
@@ -425,7 +451,8 @@ class PokemonList extends React.Component{
     return (
       <div class="col-sm-12 col-lg-6">
         {listItems}
-        {form}
+        {newTeamForm}
+        {updateTeamForm}
       </div >
     );
   }
@@ -440,7 +467,7 @@ class PokemonCard extends React.Component{
     this.removePokemonFunc = this.removePokemonFunc.bind(this);
     this.changeText = this.changeText.bind(this);
 
-    //basically if we got a name from somewhere then we will change our state accordingly 
+    //basically if we got a name from somewhere then we will change our state accordingly
     name = this.props.name;
     if (name.length > 0){
       console.log('true')

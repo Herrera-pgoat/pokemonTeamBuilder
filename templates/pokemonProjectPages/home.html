@@ -6,6 +6,16 @@
 		<!-- I am going to want to have this column disappear when we are on mobile devices. I don't know if this part will need to be in react but it might. But just becasue something is possible
 				doesn't mean that its worth doing -->
 		<div class="col-lg-1" style="">
+      <!--When the user is logged in they can see the teams they have on the left side of the screen -->
+      {% if g.user %}
+        <ul style="list-style:none;">
+        {% for team in allPokeTeams %}
+          <li>
+            <a href="{{ url_for('.loadTeam', username=g.user['username'] , team_name=team ) }}">   {{team}} </a>
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
 		</div>
 		<!-- This is the column space that useres will be able to select pokemon to their team. This will be in React-->
     <!--This is where there will be a table that has the type stuff in it. The table will be in react  -->

@@ -465,10 +465,14 @@ var PokemonList = function (_React$Component5) {
     var _this5 = _possibleConstructorReturn(this, (PokemonList.__proto__ || Object.getPrototypeOf(PokemonList)).call(this, props));
 
     _this5.updatePokeTeam = _this5.updatePokeTeam.bind(_this5);
+    _this5.changeText = _this5.changeText.bind(_this5);
     _this5.state = {
       //the format is [name type1 type2] for each poekmon in pokemon team
       pokemonTeam: [['', "", ""], ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""]],
-      saveTeamForm: "{{url_for('.saveTeam')}}"
+      saveTeamFormat: "{{url_for('.saveTeam',team_name='' )}}",
+      updateTeamFormat: "{{url_for('.updateTeam',team_name=teamName )}}",
+      saveTeamURL: '',
+      newPokeTeamName: ''
       //this is the pokemon team we got from the user if we got one
     };pokemonListTeam = _this5.props.pokemonList;
 
@@ -502,6 +506,15 @@ var PokemonList = function (_React$Component5) {
       });
     }
   }, {
+    key: 'changeText',
+    value: function changeText(event) {
+      //we will pass in the name and use it to change the value of the text thing
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+      urlNameFormat = this.state.saveTeamFormat;
+      urlNameFormat = urlNameFormat + event.target.value;
+      this.setState({ saveTeamURL: urlNameFormat });
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this6 = this;
@@ -523,21 +536,40 @@ var PokemonList = function (_React$Component5) {
         ' '
       );
       if (login) {
+        var _React$createElement;
+
+        input = React.createElement(
+          'span',
+          null,
+          React.createElement('input', { hidden: true, name: 'poke1', id: 'poke1', type: 'text', value: this.state.pokemonTeam[0][0] }),
+          React.createElement('input', { hidden: true, name: 'poke2', id: 'poke2', type: 'text', value: this.state.pokemonTeam[1][0] }),
+          React.createElement('input', { hidden: true, name: 'poke3', id: 'poke3', type: 'text', value: this.state.pokemonTeam[2][0] }),
+          React.createElement('input', { hidden: true, name: 'poke4', id: 'poke4', type: 'text', value: this.state.pokemonTeam[3][0] }),
+          React.createElement('input', { hidden: true, name: 'poke5', id: 'poke5', type: 'text', value: this.state.pokemonTeam[4][0] }),
+          React.createElement('input', { hidden: true, name: 'poke6', id: 'poke6', type: 'text', value: this.state.pokemonTeam[5][0] })
+        );
         //I am going to need to make this a form and then I am going to have to
         //send this stuff somewhere to save the information. A flask location that ultimately takes us to the same place we are now
-        form = React.createElement(
+        newTeamForm = React.createElement(
+          'span',
+          null,
+          React.createElement(
+            'form',
+            { action: this.state.saveTeamURL, method: 'POST' },
+            input,
+            React.createElement('input', { name: 'newPokeTeamName', id: 'newPokeTeamName', type: 'text', value: this.state.newPokeTeamName, onChange: this.changeText, placeholder: 'Enter new team name' }),
+            React.createElement('input', { type: 'submit', 'class': 'btn bg-primary', value: 'Create New Team', name: 'submit' })
+          )
+        );
+        updateTeamForm = React.createElement(
           'div',
           null,
           React.createElement(
             'form',
-            { action: this.state.saveTeamForm, method: 'POST' },
-            React.createElement('input', { hidden: true, name: 'poke1', id: 'poke1', type: 'text', value: this.state.pokemonTeam[0][0] }),
-            React.createElement('input', { hidden: true, name: 'poke2', id: 'poke2', type: 'text', value: this.state.pokemonTeam[1][0] }),
-            React.createElement('input', { hidden: true, name: 'poke3', id: 'poke3', type: 'text', value: this.state.pokemonTeam[2][0] }),
-            React.createElement('input', { hidden: true, name: 'poke4', id: 'poke4', type: 'text', value: this.state.pokemonTeam[3][0] }),
-            React.createElement('input', { hidden: true, name: 'poke5', id: 'poke5', type: 'text', value: this.state.pokemonTeam[4][0] }),
-            React.createElement('input', { hidden: true, name: 'poke6', id: 'poke6', type: 'text', value: this.state.pokemonTeam[5][0] }),
-            React.createElement('input', { type: 'submit', 'class': 'btn bg-primary', value: 'Save team', name: 'submit' })
+            { action: this.state.updateTeamFormat, method: 'POST' },
+            input,
+            React.createElement('input', (_React$createElement = { hidden: true }, _defineProperty(_React$createElement, 'hidden', true), _defineProperty(_React$createElement, 'name', 'updatingTeam'), _defineProperty(_React$createElement, 'id', 'updatingTeam'), _defineProperty(_React$createElement, 'type', 'text'), _defineProperty(_React$createElement, 'value', '{{teamName}}'), _React$createElement)),
+            React.createElement('input', { type: 'submit', 'class': 'btn bg-primary', value: 'Update This Team', name: 'submit' })
           )
         );
       }
@@ -545,7 +577,8 @@ var PokemonList = function (_React$Component5) {
         'div',
         { 'class': 'col-sm-12 col-lg-6' },
         listItems,
-        form
+        newTeamForm,
+        updateTeamForm
       );
     }
   }]);
@@ -566,7 +599,7 @@ var PokemonCard = function (_React$Component6) {
     _this7.removePokemonFunc = _this7.removePokemonFunc.bind(_this7);
     _this7.changeText = _this7.changeText.bind(_this7);
 
-    //basically if we got a name from somewhere then we will change our state accordingly 
+    //basically if we got a name from somewhere then we will change our state accordingly
     name = _this7.props.name;
     if (name.length > 0) {
       console.log('true');

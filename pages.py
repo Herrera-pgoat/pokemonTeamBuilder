@@ -14,9 +14,30 @@ bp = Blueprint('', __name__)
 #This is the main page so we don't have any slashes we just go to main place domain
 @bp.route('/',methods=['GET','POST'])
 def mainPage():
+    #getting the username session if they are signed in
+    username = session.get('username')
+    pokemonTeam = []
+    if not(username is None):
+        #I should query the database that way I can get the team that I have saved
+        pokeTeam = PokeTeams.query.filter_by(username=username).first()
+        pokemonTeam.append(pokeTeam.pokemonName1)
+        pokemonTeam.append(pokeTeam.pokemonName2)
+        pokemonTeam.append(pokeTeam.pokemonName3)
+        pokemonTeam.append(pokeTeam.pokemonName4)
+        pokemonTeam.append(pokeTeam.pokemonName5)
+        pokemonTeam.append(pokeTeam.pokemonName6)
+
+    else:
+        print('hello')
     #No matter what I am going to send a list of all the pokemon I have from the database
-    allPokemon = Pokemon.query.filter_by().all()
+    #allPokemon = Pokemon.query.filter_by().all()
     #on a post I expect to have logged in so I will try to log them in
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    my_file = os.path.join(THIS_FOLDER, 'pokemonList.json')
+    with open(my_file, 'r') as myfile:
+        data=myfile.read()
+    #THis is the json file with all the item names
+    pokemonInformation = json.loads(data)
     if( request.method =="POST"):
         #We are in a post method which means they tried to log in
         #I need to check for the user name they put in and if the password they put in matches the password with that username
@@ -31,19 +52,14 @@ def mainPage():
             #The username is in the database and the password matches
             session.clear()
             session['username'] = username
-            return redirect(url_for('.mainPage'), allPokemon=allPokemon)
+            return redirect(url_for('.mainPage',pokeStuff=pokemonInformation,pokeTeam=pokemonTeam))
 
             #if we are here then the user is 'logged in'
         else:
             flash("The password does not match the usernames")
 
-    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    my_file = os.path.join(THIS_FOLDER, 'pokemonList.json')
-    with open(my_file, 'r') as myfile:
-        data=myfile.read()
-    #THis is the json file with all the item names
-    pokemonInformation = json.loads(data)
-    return render_template('/pokemonProjectPages/home.html',allPokemon=allPokemon,pokeStuff=pokemonInformation)
+
+    return render_template('/pokemonProjectPages/home.html',pokeStuff=pokemonInformation,pokeTeam=pokemonTeam)
     #we are going to return to the main index screen where
 
 #This is the register page
@@ -76,6 +92,49 @@ def register():
     #I should check whether the thing is get or post because now no matter what I am going here
     return render_template('/pokemonProjectPages/register.html')
     #we are right now not doing anything I just want to get the views in a Function
+
+#this route is saving teams to the
+@bp.route('/saveTeam',methods=['GET','POST'])
+def saveTeam():
+    #if we are post then we are going save a team
+    if (request.method == 'POST'):
+        #getting the username of the user
+        username = session.get('username')
+
+        #if they are not signed in as a user then we take them to about and flash a message
+        if (username is None):
+            flash('You are not signed in. Try signing in!')
+            return render_template('/pokemonProjectPages/about.html')
+
+        pokeTeamUser = PokeTeams.query.filter_by(username=username,pokemonTeamName='test').first()
+        if not(pokeTeamUser is None):
+            flash('You already have a pokemon team named that try something else')
+            return render_template('/pokemonProjectPages/about.html')
+        #getting the name of every pokemon
+        pokeName1 = request.form['poke1']
+        pokeName2 = request.form['poke2']
+        pokeName3 = request.form['poke3']
+        pokeName4 = request.form['poke4']
+        pokeName5 = request.form['poke5']
+        pokeName6 = request.form['poke6']
+
+        #creating a pokemon team then adding it to the database
+        newPokeTeam = PokeTeams(username= username,pokemonTeamName='test',pokemonName1=pokeName1,pokemonName2=pokeName2,pokemonName3=pokeName3,pokemonName4=pokeName4,pokemonName5=pokeName5,pokemonName6=pokeName6)
+        db.session.add(newPokeTeam)
+        db.session.commit()
+
+        THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+        my_file = os.path.join(THIS_FOLDER, 'pokemonList.json')
+        with open(my_file, 'r') as myfile:
+            data=myfile.read()
+        #THis is the json file with all the item names
+        pokemonInformation = json.loads(data)
+
+        return redirect(url_for('.mainPage',pokeStuff=pokemonInformation))
+    else:
+        flash("I have no idea how you got there but don't try it again ")
+        return redirect(url_for('.aboutPage'))
+
 
 @bp.route('/about',methods=['GET'])
 def aboutPage():

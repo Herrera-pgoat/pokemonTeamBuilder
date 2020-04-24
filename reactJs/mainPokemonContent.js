@@ -1,6 +1,5 @@
 //So first thought is to have the pokemonList contain a list of the pokemoncards and we will
 //increase or decrease the number of cards through the button in the pokemoncard ??
-//https://clips.twitch.tv/AverageGeniusMinkMingLee leffen likes toradora
 class PokemonMainContent extends React.Component{
   constructor(props){
     super(props);
@@ -16,12 +15,8 @@ class PokemonMainContent extends React.Component{
     };
 
     //binding the function to here this pokemonMainContent class
+    this.initPoke = this.initPoke.bind(this);
     this.updatePoke = this.updatePoke.bind(this);
-    //then I need to tie each one to one of the functions to a card in the pokemon list
-
-    //Finally I need to tie the tableStuff to the state of each of these pokemons
-    //it will read the type then basd on the type it will whether it is weak to that pokemon type or not
-    //at long last it will update the table based on the info it gets from the type stuff
   }
 
 //the function takes in both types of the pokemon and updates the state here that the pokemon type has changed
@@ -30,12 +25,36 @@ class PokemonMainContent extends React.Component{
   updatePoke(pokeNum, type1,type2){
     this.setState({ [pokeNum]: [type1,type2]});
   }
+  //this function is to initialize the page with the pokemon team we send in
+  initPoke(pokemonTeam){
+    index = 1;
+    stateIndex = 'poke';
+    //for every pokemon we have in pokemon Team we are going to add it to the team
+    for (var pokemonIndex in pokemonTeam){
+      //stateIndex now points at the correct index
+      stateIndex += index.toString();
+      if (pokeStuff.hasOwnProperty(pokemonTeam[pokemonIndex])){
+        //Getting the types to update the pokemon stuff
+        type1 = pokeStuff[pokemonTeam[pokemonIndex]][0]['Type1'];
+        type2 = pokeStuff[pokemonTeam[pokemonIndex]][0]['Type2'];
+        this.updatePoke(stateIndex,type1,type2);
+      }
+      //increasing index and making resetting stateIndex
+      index +=1;
+      stateIndex = 'poke';
+    }
+  }
 
   render(){
+    //if there is a team that they have passed in we update accordingly
+    if (pokemonTeam.length > 0){
+      console.log('We are entering the function')
+      this.initPoke(pokemonTeam);
+    }
     //the div is a row that way neither pokemonList or TableType tries to go to the other row. THe row class confines it to current row unless I say otherwise
     return(
       <div class="row">
-          <PokemonList onPokemonUpdate={this.updatePoke} />
+          <PokemonList onPokemonUpdate={this.updatePoke} pokemonList={pokemonTeam}/>
           <TableType pokeTypeInfo={[this.state.poke1,this.state.poke2,this.state.poke3,this.state.poke4,this.state.poke5,this.state.poke6]}/>
       </div>
     );
@@ -339,13 +358,28 @@ class PokemonList extends React.Component{
     super(props);
     this.updatePokeTeam = this.updatePokeTeam.bind(this);
     this.state={
-      pokemonTeam : [['Tyranitar',"Dark","Rock"],["Garchomp","Dragon","Ground"],["Greninja","Water","Dark"],["Charizard","Fire","Flying"],["Alakazam","Psychic",""],["Infernape","Fire","Fighting"]],
-      poke2 : ['',''],
-      poke3 : ['',''],
-      poke4 : ['',''],
-      poke5 : ['',''],
-      poke6 : ['','']
+      //the format is [name type1 type2] for each poekmon in pokemon team
+      pokemonTeam : [['',"",""],["","",""],["","",""],["","",""],["","",""],["","",""]],
+      saveTeamForm:"{{url_for('.saveTeam')}}",
     }
+    //this is the pokemon team we got from the user if we got one
+    pokemonListTeam = this.props.pokemonList
+
+    index = 0;
+    //for every pokemon we have in pokemon Team we are going to add it to the team
+    for (var pokemonIndex in pokemonTeam){
+      //stateIndex now points at the correct index
+      pokeName = pokemonTeam[pokemonIndex]
+      if (pokeStuff.hasOwnProperty(pokeName)){
+        //Getting the types to update the pokemon stuff
+        type1 = pokeStuff[pokeName][0]['Type1'];
+        type2 = pokeStuff[pokeName][0]['Type2'];
+        this.updatePokeTeam(pokeName,type1,type2,index);
+      }
+      //increasing index and making resetting stateIndex
+      index +=1;
+    }
+
   }
   updatePokeTeam(name,type1,type2,index){
     pokemonTeamThing = this.state.pokemonTeam
@@ -358,28 +392,40 @@ class PokemonList extends React.Component{
   }
   render(){
     //List of all the pokemon we are going to have in the team
-    //when I do connect the database I need to update this list any time they add a pokemon.
     pokemonTeam = this.state.pokemonTeam
-    //I need an update function that I send to each pokemon card that when you push the enter thing we
-    //update the pokemonTeam variable
-    //That way we get the correct type and names. We have a json file that gives us the name and then with the name we get the types
-    //I must make sure that they type out the correct name or else it won't work
-    /*
-    rn I have
-    this.props.onPokemonUpdate  <--- this has the function that updates the state of the papa depending on the poke number we are
-    */
 
     //Here we are creating a pokemon tag for every pokemon in our pokemon team list
     //every pokemon is getting a function that changes this parents (their grandparents) state
     listItems = pokemonTeam.map((pokemon,index) =>{
       increasedIndex = (index+1);
       return (<PokemonCard index={index} newid ={'addPokemon' + increasedIndex} name={pokemon[0]} type1={pokemon[1]} type2={pokemon[2]} stateNum={"poke"+increasedIndex} singlePokeUpdate={this.props.onPokemonUpdate} pokeTeamUpdate={this.updatePokeTeam} /> );
-    }
+      }
     );
 
+    //Only showing the button when we are logged in
+    var form = <div> </div>
+    if (login){
+      //I am going to need to make this a form and then I am going to have to
+      //send this stuff somewhere to save the information. A flask location that ultimately takes us to the same place we are now
+      form =  (
+        <div>
+        <form action={this.state.saveTeamForm} method="POST" >
+
+          <input hidden name="poke1" id="poke1" type="text" value={this.state.pokemonTeam[0][0]}  />
+          <input hidden name="poke2" id="poke2" type="text" value={this.state.pokemonTeam[1][0]}   />
+          <input hidden name="poke3" id="poke3" type="text" value={this.state.pokemonTeam[2][0]}  />
+          <input hidden name="poke4" id="poke4" type="text" value={this.state.pokemonTeam[3][0]} />
+          <input hidden name="poke5" id="poke5" type="text" value={this.state.pokemonTeam[4][0]}  />
+          <input hidden name="poke6" id="poke6" type="text" value={this.state.pokemonTeam[5][0]}  />
+          <input type="submit" class="btn bg-primary" value="Save team" name="submit"/>
+        </form>
+        </div>
+      );
+    }
     return (
       <div class="col-sm-12 col-lg-6">
         {listItems}
+        {form}
       </div >
     );
   }
@@ -388,15 +434,28 @@ class PokemonList extends React.Component{
 class PokemonCard extends React.Component{
   constructor(props){
     super(props);
-    this.state = {
-      isActive:false,
-      pokeName:''
-                };
+
     //binding the function to this place
     this.addPokemonFunc = this.addPokemonFunc.bind(this);
     this.removePokemonFunc = this.removePokemonFunc.bind(this);
     this.changeText = this.changeText.bind(this);
-  }
+
+    //basically if we got a name from somewhere then we will change our state accordingly 
+    name = this.props.name;
+    if (name.length > 0){
+      console.log('true')
+      this.state = {
+        isActive:true,
+        pokeName:name
+      };
+    }//end of if
+    else{
+      this.state = {
+        isActive:false,
+        pokeName:''
+      };
+    }
+  }//end of the constructoerr
 
 //creating a function to change the state of a pokemon  to true when we have added a pokemon
   addPokemonFunc(){
@@ -413,7 +472,6 @@ class PokemonCard extends React.Component{
       type2 = pokeStuff[this.state.pokeName][0]['Type2']
       this.props.singlePokeUpdate(this.props.stateNum,type1,type2);
       this.props.pokeTeamUpdate(this.state.pokeName,type1,type2,this.props.index);
-      console.log(pokeStuff[this.state.pokeName])
     }
     else{
       console.log('Not a valid pokemon name')
@@ -435,9 +493,7 @@ class PokemonCard extends React.Component{
   }
 
   render(){
-    /* Hither is where I will make the card look nice for the pokemons
-    card
-    has name , types, button to remove itself*/
+
     //Here we should check if this card is active. WHen the card is active we show the pokemon and when it is not we show just add pokemon button
     active = this.state.isActive;
     if (active){

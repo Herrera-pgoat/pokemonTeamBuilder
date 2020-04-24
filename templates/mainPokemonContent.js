@@ -10,7 +10,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 //So first thought is to have the pokemonList contain a list of the pokemoncards and we will
 //increase or decrease the number of cards through the button in the pokemoncard ??
-//https://clips.twitch.tv/AverageGeniusMinkMingLee leffen likes toradora
 var PokemonMainContent = function (_React$Component) {
   _inherits(PokemonMainContent, _React$Component);
 
@@ -31,12 +30,8 @@ var PokemonMainContent = function (_React$Component) {
     };
 
     //binding the function to here this pokemonMainContent class
+    _this.initPoke = _this.initPoke.bind(_this);
     _this.updatePoke = _this.updatePoke.bind(_this);
-    //then I need to tie each one to one of the functions to a card in the pokemon list
-
-    //Finally I need to tie the tableStuff to the state of each of these pokemons
-    //it will read the type then basd on the type it will whether it is weak to that pokemon type or not
-    //at long last it will update the table based on the info it gets from the type stuff
     return _this;
   }
 
@@ -50,14 +45,41 @@ var PokemonMainContent = function (_React$Component) {
     value: function updatePoke(pokeNum, type1, type2) {
       this.setState(_defineProperty({}, pokeNum, [type1, type2]));
     }
+    //this function is to initialize the page with the pokemon team we send in
+
+  }, {
+    key: 'initPoke',
+    value: function initPoke(pokemonTeam) {
+      index = 1;
+      stateIndex = 'poke';
+      //for every pokemon we have in pokemon Team we are going to add it to the team
+      for (var pokemonIndex in pokemonTeam) {
+        //stateIndex now points at the correct index
+        stateIndex += index.toString();
+        if (pokeStuff.hasOwnProperty(pokemonTeam[pokemonIndex])) {
+          //Getting the types to update the pokemon stuff
+          type1 = pokeStuff[pokemonTeam[pokemonIndex]][0]['Type1'];
+          type2 = pokeStuff[pokemonTeam[pokemonIndex]][0]['Type2'];
+          this.updatePoke(stateIndex, type1, type2);
+        }
+        //increasing index and making resetting stateIndex
+        index += 1;
+        stateIndex = 'poke';
+      }
+    }
   }, {
     key: 'render',
     value: function render() {
+      //if there is a team that they have passed in we update accordingly
+      if (pokemonTeam.length > 0) {
+        console.log('We are entering the function');
+        this.initPoke(pokemonTeam);
+      }
       //the div is a row that way neither pokemonList or TableType tries to go to the other row. THe row class confines it to current row unless I say otherwise
       return React.createElement(
         'div',
         { 'class': 'row' },
-        React.createElement(PokemonList, { onPokemonUpdate: this.updatePoke }),
+        React.createElement(PokemonList, { onPokemonUpdate: this.updatePoke, pokemonList: pokemonTeam }),
         React.createElement(TableType, { pokeTypeInfo: [this.state.poke1, this.state.poke2, this.state.poke3, this.state.poke4, this.state.poke5, this.state.poke6] })
       );
     } //end of render
@@ -444,13 +466,27 @@ var PokemonList = function (_React$Component5) {
 
     _this5.updatePokeTeam = _this5.updatePokeTeam.bind(_this5);
     _this5.state = {
-      pokemonTeam: [['Tyranitar', "Dark", "Rock"], ["Garchomp", "Dragon", "Ground"], ["Greninja", "Water", "Dark"], ["Charizard", "Fire", "Flying"], ["Alakazam", "Psychic", ""], ["Infernape", "Fire", "Fighting"]],
-      poke2: ['', ''],
-      poke3: ['', ''],
-      poke4: ['', ''],
-      poke5: ['', ''],
-      poke6: ['', '']
-    };
+      //the format is [name type1 type2] for each poekmon in pokemon team
+      pokemonTeam: [['', "", ""], ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""]],
+      saveTeamForm: "{{url_for('.saveTeam')}}"
+      //this is the pokemon team we got from the user if we got one
+    };pokemonListTeam = _this5.props.pokemonList;
+
+    index = 0;
+    //for every pokemon we have in pokemon Team we are going to add it to the team
+    for (var pokemonIndex in pokemonTeam) {
+      //stateIndex now points at the correct index
+      pokeName = pokemonTeam[pokemonIndex];
+      if (pokeStuff.hasOwnProperty(pokeName)) {
+        //Getting the types to update the pokemon stuff
+        type1 = pokeStuff[pokeName][0]['Type1'];
+        type2 = pokeStuff[pokeName][0]['Type2'];
+        _this5.updatePokeTeam(pokeName, type1, type2, index);
+      }
+      //increasing index and making resetting stateIndex
+      index += 1;
+    }
+
     return _this5;
   }
 
@@ -471,16 +507,7 @@ var PokemonList = function (_React$Component5) {
       var _this6 = this;
 
       //List of all the pokemon we are going to have in the team
-      //when I do connect the database I need to update this list any time they add a pokemon.
       pokemonTeam = this.state.pokemonTeam;
-      //I need an update function that I send to each pokemon card that when you push the enter thing we
-      //update the pokemonTeam variable
-      //That way we get the correct type and names. We have a json file that gives us the name and then with the name we get the types
-      //I must make sure that they type out the correct name or else it won't work
-      /*
-      rn I have
-      this.props.onPokemonUpdate  <--- this has the function that updates the state of the papa depending on the poke number we are
-      */
 
       //Here we are creating a pokemon tag for every pokemon in our pokemon team list
       //every pokemon is getting a function that changes this parents (their grandparents) state
@@ -489,10 +516,36 @@ var PokemonList = function (_React$Component5) {
         return React.createElement(PokemonCard, { index: index, newid: 'addPokemon' + increasedIndex, name: pokemon[0], type1: pokemon[1], type2: pokemon[2], stateNum: "poke" + increasedIndex, singlePokeUpdate: _this6.props.onPokemonUpdate, pokeTeamUpdate: _this6.updatePokeTeam });
       });
 
+      //Only showing the button when we are logged in
+      var form = React.createElement(
+        'div',
+        null,
+        ' '
+      );
+      if (login) {
+        //I am going to need to make this a form and then I am going to have to
+        //send this stuff somewhere to save the information. A flask location that ultimately takes us to the same place we are now
+        form = React.createElement(
+          'div',
+          null,
+          React.createElement(
+            'form',
+            { action: this.state.saveTeamForm, method: 'POST' },
+            React.createElement('input', { hidden: true, name: 'poke1', id: 'poke1', type: 'text', value: this.state.pokemonTeam[0][0] }),
+            React.createElement('input', { hidden: true, name: 'poke2', id: 'poke2', type: 'text', value: this.state.pokemonTeam[1][0] }),
+            React.createElement('input', { hidden: true, name: 'poke3', id: 'poke3', type: 'text', value: this.state.pokemonTeam[2][0] }),
+            React.createElement('input', { hidden: true, name: 'poke4', id: 'poke4', type: 'text', value: this.state.pokemonTeam[3][0] }),
+            React.createElement('input', { hidden: true, name: 'poke5', id: 'poke5', type: 'text', value: this.state.pokemonTeam[4][0] }),
+            React.createElement('input', { hidden: true, name: 'poke6', id: 'poke6', type: 'text', value: this.state.pokemonTeam[5][0] }),
+            React.createElement('input', { type: 'submit', 'class': 'btn bg-primary', value: 'Save team', name: 'submit' })
+          )
+        );
+      }
       return React.createElement(
         'div',
         { 'class': 'col-sm-12 col-lg-6' },
-        listItems
+        listItems,
+        form
       );
     }
   }]);
@@ -506,18 +559,30 @@ var PokemonCard = function (_React$Component6) {
   function PokemonCard(props) {
     _classCallCheck(this, PokemonCard);
 
+    //binding the function to this place
     var _this7 = _possibleConstructorReturn(this, (PokemonCard.__proto__ || Object.getPrototypeOf(PokemonCard)).call(this, props));
 
-    _this7.state = {
-      isActive: false,
-      pokeName: ''
-    };
-    //binding the function to this place
     _this7.addPokemonFunc = _this7.addPokemonFunc.bind(_this7);
     _this7.removePokemonFunc = _this7.removePokemonFunc.bind(_this7);
     _this7.changeText = _this7.changeText.bind(_this7);
+
+    //basically if we got a name from somewhere then we will change our state accordingly 
+    name = _this7.props.name;
+    if (name.length > 0) {
+      console.log('true');
+      _this7.state = {
+        isActive: true,
+        pokeName: name
+      };
+    } //end of if
+    else {
+        _this7.state = {
+          isActive: false,
+          pokeName: ''
+        };
+      }
     return _this7;
-  }
+  } //end of the constructoerr
 
   //creating a function to change the state of a pokemon  to true when we have added a pokemon
 
@@ -538,7 +603,6 @@ var PokemonCard = function (_React$Component6) {
         type2 = pokeStuff[this.state.pokeName][0]['Type2'];
         this.props.singlePokeUpdate(this.props.stateNum, type1, type2);
         this.props.pokeTeamUpdate(this.state.pokeName, type1, type2, this.props.index);
-        console.log(pokeStuff[this.state.pokeName]);
       } else {
         console.log('Not a valid pokemon name');
       }
@@ -562,9 +626,7 @@ var PokemonCard = function (_React$Component6) {
   }, {
     key: 'render',
     value: function render() {
-      /* Hither is where I will make the card look nice for the pokemons
-      card
-      has name , types, button to remove itself*/
+
       //Here we should check if this card is active. WHen the card is active we show the pokemon and when it is not we show just add pokemon button
       active = this.state.isActive;
       if (active) {

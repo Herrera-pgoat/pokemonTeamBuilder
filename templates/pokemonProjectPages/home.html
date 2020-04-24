@@ -13,8 +13,18 @@
 	<div class="col-lg-11 col-12" id="pokemons"> </div>
 
 	<script type="text/javascript">
-		{% include "mainPokemonContent.js" %}
-    {% include "autocompleteJavascript.js" %}
+    var login = false
+    {% if g.user %}
+      login = true
+    {% endif %}
+
+    //putting the team of my pokemon in here
+    var pokemonTeam = [];
+    pokeTeamNames = {{pokeTeam|tojson}}
+    for (var pokemonIndex in pokeTeamNames){
+      pokemonTeam.push(pokeTeamNames[pokemonIndex])
+    }
+    console.log(pokemonTeam)
 
     var pokemonList = [];
     //All the json stuff is in pokeStuff so I am getting it in here
@@ -24,6 +34,8 @@
       pokemonList.push( pokemonName )
       // console.log( pokemonName )
     }
+		{% include "mainPokemonContent.js" %}
+    {% include "autocompleteJavascript.js" %}
 
     //Giving autocomppltet to all the inputs in the pokemon thing field
     autocomplete(document.getElementById('addPokemon1'), pokemonList);
